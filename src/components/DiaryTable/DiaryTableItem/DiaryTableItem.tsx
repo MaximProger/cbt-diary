@@ -1,15 +1,19 @@
-import { TableCell, TableRow } from 'flowbite-react';
+import { Button, TableCell, TableRow } from 'flowbite-react';
+import { MdOutlineDelete } from 'react-icons/md';
+import type { TAppDispatch } from '../../../store';
+import { useDispatch } from 'react-redux';
+import { deleteEntry, setDeleteEntryId } from '../../../store/entrySlice';
+import type { IEntry } from '../../../types';
+import { openDialog } from '../../../store/dialogSlice';
 
 interface IProps {
-  date: Date;
-  worstCase: string;
-  worstConsequences: string;
-  whatCanIDo: string;
-  howWillICope: string;
+  entry: IEntry;
 }
 
-const DiaryTableItem = ({ date, worstCase, worstConsequences, whatCanIDo, howWillICope }: IProps) => {
-  const formattedDate = date
+const DiaryTableItem = ({ entry }: IProps) => {
+  const dispatch: TAppDispatch = useDispatch();
+  const dateObject = new Date(entry.created_at);
+  const formattedDate = dateObject
     .toLocaleString('ru-RU', {
       day: '2-digit',
       month: '2-digit',
@@ -20,13 +24,23 @@ const DiaryTableItem = ({ date, worstCase, worstConsequences, whatCanIDo, howWil
     })
     .replace(',', ' ');
 
+  const handleDeleteClick = () => {
+    dispatch(setDeleteEntryId(entry.id));
+    dispatch(openDialog('isOpenDeleteDialog'));
+  };
+
   return (
     <TableRow className="bg-white dark:border-gray-700 dark:bg-gray-800">
       <TableCell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">{formattedDate}</TableCell>
-      <TableCell>{worstCase}</TableCell>
-      <TableCell>{worstConsequences}</TableCell>
-      <TableCell>{whatCanIDo}</TableCell>
-      <TableCell>{howWillICope}</TableCell>
+      <TableCell>{entry.worst_case}</TableCell>
+      <TableCell>{entry.worst_consequences}</TableCell>
+      <TableCell>{entry.what_can_i_do}</TableCell>
+      <TableCell>{entry.how_will_i_cope}</TableCell>
+      <TableCell>
+        <Button color="red" className="cursor-pointer" size="xs" pill onClick={handleDeleteClick}>
+          <MdOutlineDelete className="w-4 h-4" />
+        </Button>
+      </TableCell>
     </TableRow>
   );
 };

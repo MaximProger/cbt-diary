@@ -3,33 +3,55 @@ import { useForm, type SubmitHandler } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { closeDialog } from '../../store/dialogSlice';
 import type { IFormData } from '../../types';
-import { addEntry } from '../../store/entrySlice';
+import { createEntry } from '../../store/entrySlice';
+import type { TAppDispatch, TRootState } from '../../store';
+import type { User } from '@supabase/supabase-js';
+import { useToast } from '@/hooks/useToast';
 
 const textAreaSize = 5;
 
-const Dialog = () => {
-  const isSlowDialog = useSelector((state) => state.dialogs.isOpenDialog);
-  const dispatch = useDispatch();
+interface IProps {
+  user: User;
+}
+
+const AddDialog = ({ user }: IProps) => {
+  const toast = useToast();
+  const isShowDialog = useSelector((state: TRootState) => state.dialogs.isOpenAddDialog);
+  const dispatch: TAppDispatch = useDispatch();
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { isValid },
     reset,
   } = useForm<IFormData>();
-  const onSubmit: SubmitHandler<IFormData> = (data) => {
-    console.log(data);
-    dispatch(addEntry(data));
-    onClose();
-    reset();
+  const onSubmit: SubmitHandler<IFormData> = async (formData) => {
+    const entry = {
+      created_at: new Date().toISOString(),
+      created_by: user.id,
+      worst_case: formData.worstCase,
+      worst_consequences: formData.worstConsequences,
+      what_can_i_do: formData.whatCanIDo,
+      how_will_i_cope: formData.howWillICope,
+    };
+
+    try {
+      await dispatch(createEntry(entry)).unwrap();
+
+      handleDialogClose();
+      reset();
+    } catch (error) {
+      console.error(error);
+      toast.danger('Произошла ошибка при добавлении записи!');
+    }
   };
 
-  const onClose = () => {
-    dispatch(closeDialog());
+  const handleDialogClose = () => {
+    dispatch(closeDialog('isOpenAddDialog'));
   };
 
   return (
-    <Modal dismissible size="3xl" show={isSlowDialog} onClose={onClose}>
+    <Modal dismissible size="3xl" show={isShowDialog} onClose={handleDialogClose}>
       <ModalHeader>Добавление записи</ModalHeader>
       <ModalBody>
         <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
@@ -67,7 +89,7 @@ const Dialog = () => {
         <Button onClick={handleSubmit(onSubmit)} disabled={!isValid}>
           Создать
         </Button>
-        <Button color="gray" onClick={onClose}>
+        <Button color="gray" onClick={handleDialogClose}>
           Отмена
         </Button>
       </ModalFooter>
@@ -75,4 +97,4 @@ const Dialog = () => {
   );
 };
 
-export default Dialog;
+export default AddDialog;

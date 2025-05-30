@@ -1,18 +1,26 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  isOpenDialog: false,
+  isOpenAddDialog: false,
+  isOpenAuthDialog: false,
+  isOpenDeleteDialog: false,
 };
 
 const dialogSlice = createSlice({
   name: 'dialogs',
   initialState,
   reducers: {
-    openDialog: (state) => {
-      state.isOpenDialog = true;
+    openDialog: (state, action) => {
+      const dialogName = action.payload as keyof typeof initialState;
+      state[dialogName] = true;
     },
-    closeDialog: (state) => {
-      state.isOpenDialog = false;
+    closeDialog: (state, action) => {
+      const dialogName = action.payload as keyof typeof initialState;
+      state[dialogName] = false;
+    },
+    toggleDialog: (state, action) => {
+      const dialogName = action.payload as keyof typeof initialState;
+      state[dialogName] = !state[dialogName];
     },
   },
 });

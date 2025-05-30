@@ -2,12 +2,21 @@ import { Button, Table, TableBody, TableHead, TableHeadCell, TableRow } from 'fl
 import DiaryTableItem from './DiaryTableItem/DiaryTableItem';
 import type { IEntry } from '../../types';
 import { useSelector } from 'react-redux';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { supabase } from '../../supabaseClient';
+import type { User } from '@supabase/supabase-js';
+import type { TRootState } from '../../store';
 
 const DEFAULT_VISIBLE_ENTRIES_LIMIT = 5;
 
-const DiaryTable = () => {
-  const entries: IEntry[] = useSelector((state) => state.entries.entries);
+interface IProps {
+  user: User;
+}
+
+const DiaryTable = ({ user }: IProps) => {
+  const entries: IEntry[] = useSelector((state: TRootState) => state.entries.entries);
+  console.log('entries', entries);
+
   const [visibleEntriesLimit, setVisibleEntriesLimit] = useState<number>(DEFAULT_VISIBLE_ENTRIES_LIMIT);
 
   const loadMore = () => {
@@ -17,7 +26,7 @@ const DiaryTable = () => {
   return (
     entries.length > 0 && (
       <>
-        <div className="overflow-x-auto mt-10">
+        <div className="overflow-x-auto">
           <Table hoverable>
             <TableHead>
               <TableRow>
@@ -26,18 +35,12 @@ const DiaryTable = () => {
                 <TableHeadCell>Какие самые плохие последствия могут быть у этой ситуации</TableHeadCell>
                 <TableHeadCell>Что я смогу сделать в этой ситуации</TableHeadCell>
                 <TableHeadCell>Как я справлюсь</TableHeadCell>
+                <TableHeadCell></TableHeadCell>
               </TableRow>
             </TableHead>
             <TableBody className="divide-y">
-              {entries.slice(0, visibleEntriesLimit).map((item) => (
-                <DiaryTableItem
-                  key={item.id}
-                  date={item.date}
-                  worstCase={item.worstCase}
-                  worstConsequences={item.worstConsequences}
-                  whatCanIDo={item.whatCanIDo}
-                  howWillICope={item.howWillICope}
-                />
+              {entries.slice(0, visibleEntriesLimit).map((entry) => (
+                <DiaryTableItem key={entry.id} entry={entry} />
               ))}
             </TableBody>
           </Table>

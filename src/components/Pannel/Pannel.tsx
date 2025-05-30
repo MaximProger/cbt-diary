@@ -5,13 +5,13 @@ import { openDialog } from '../../store/dialogSlice';
 const Pannel = () => {
   const dispatch = useDispatch();
 
-  const handleClick = () => {
-    dispatch(openDialog());
+  const openAddDialog = () => {
+    dispatch(openDialog('isOpenAddDialog'));
   };
 
   return (
     <div className="flex items-center">
-      <Button className="w-full cursor-pointer" onClick={handleClick}>
+      <Button className="w-full cursor-pointer mb-10" onClick={openAddDialog}>
         Добавить запись
       </Button>
     </div>
