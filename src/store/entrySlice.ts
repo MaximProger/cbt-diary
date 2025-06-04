@@ -36,11 +36,22 @@ export const deleteEntry = createAsyncThunk('entries/deleteEntry', async (id: nu
   return id;
 });
 
+export const editEntry = createAsyncThunk('entries/editEntry', async (entry: IEntry, { rejectWithValue }) => {
+  const { data, error } = await supabase.from('catostrafization_entries').update(entry).eq('id', entry.id).select();
+
+  if (error) {
+    return rejectWithValue(error.message);
+  }
+
+  return data[0];
+});
+
 interface IInitialState {
   entries: IEntry[];
   status: 'pending' | 'fulfilled' | 'rejected' | null;
   error: string | null;
   deleteEntryId: number | null;
+  editEntryId: number | null;
 }
 
 const initialState: IInitialState = {
@@ -48,6 +59,7 @@ const initialState: IInitialState = {
   status: null,
   error: null,
   deleteEntryId: null,
+  editEntryId: null,
 };
 
 const setError = (
@@ -75,6 +87,12 @@ const entrySlice = createSlice({
     clearDeleteEntryId: (state) => {
       state.deleteEntryId = null;
     },
+    setEditEntryId: (state, action) => {
+      state.editEntryId = action.payload;
+    },
+    clearEditEntryId: (state) => {
+      state.editEntryId = null;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchEntries.pending, (state) => {
@@ -94,8 +112,11 @@ const entrySlice = createSlice({
 
       state.entries = state.entries.filter((entry) => entry.id !== action.payload);
     });
+    builder.addCase(editEntry.fulfilled, (state, action) => {
+      state.entries = state.entries.map((entry) => (entry.id === action.payload.id ? action.payload : entry));
+    });
   },
 });
 
-export const { addEntry, setDeleteEntryId, clearDeleteEntryId } = entrySlice.actions;
+export const { addEntry, setDeleteEntryId, clearDeleteEntryId, setEditEntryId, clearEditEntryId } = entrySlice.actions;
 export default entrySlice.reducer;

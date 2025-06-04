@@ -2,20 +2,13 @@ import { Button, Table, TableBody, TableHead, TableHeadCell, TableRow } from 'fl
 import DiaryTableItem from './DiaryTableItem/DiaryTableItem';
 import type { IEntry } from '../../types';
 import { useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
-import { supabase } from '../../supabaseClient';
-import type { User } from '@supabase/supabase-js';
+import { useState } from 'react';
 import type { TRootState } from '../../store';
 
 const DEFAULT_VISIBLE_ENTRIES_LIMIT = 5;
 
-interface IProps {
-  user: User;
-}
-
-const DiaryTable = ({ user }: IProps) => {
+const DiaryTable = () => {
   const entries: IEntry[] = useSelector((state: TRootState) => state.entries.entries);
-  console.log('entries', entries);
 
   const [visibleEntriesLimit, setVisibleEntriesLimit] = useState<number>(DEFAULT_VISIBLE_ENTRIES_LIMIT);
 

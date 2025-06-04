@@ -1,10 +1,10 @@
 import { Button, TableCell, TableRow } from 'flowbite-react';
-import { MdOutlineDelete } from 'react-icons/md';
-import type { TAppDispatch } from '../../../store';
+import { MdOutlineDelete, MdOutlineEdit } from 'react-icons/md';
+import type { TAppDispatch } from '@/store';
 import { useDispatch } from 'react-redux';
-import { deleteEntry, setDeleteEntryId } from '../../../store/entrySlice';
-import type { IEntry } from '../../../types';
-import { openDialog } from '../../../store/dialogSlice';
+import { setDeleteEntryId, setEditEntryId } from '@/store/entrySlice';
+import type { IEntry } from '@/types';
+import { openDialog } from '@/store/dialogSlice';
 
 interface IProps {
   entry: IEntry;
@@ -29,6 +29,11 @@ const DiaryTableItem = ({ entry }: IProps) => {
     dispatch(openDialog('isOpenDeleteDialog'));
   };
 
+  const handleEditClick = () => {
+    dispatch(setEditEntryId(entry.id));
+    dispatch(openDialog('isOpenEditDialog'));
+  };
+
   return (
     <TableRow className="bg-white dark:border-gray-700 dark:bg-gray-800">
       <TableCell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">{formattedDate}</TableCell>
@@ -37,9 +42,26 @@ const DiaryTableItem = ({ entry }: IProps) => {
       <TableCell>{entry.what_can_i_do}</TableCell>
       <TableCell>{entry.how_will_i_cope}</TableCell>
       <TableCell>
-        <Button color="red" className="cursor-pointer" size="xs" pill onClick={handleDeleteClick}>
-          <MdOutlineDelete className="w-4 h-4" />
-        </Button>
+        <div className="flex gap-[6px]">
+          <Button
+            color="green"
+            className="w-[32px] h-[32px] cursor-pointer rounded-full p-0"
+            size="xs"
+            pill
+            onClick={handleEditClick}
+          >
+            <MdOutlineEdit className="w-4 h-4" />
+          </Button>
+          <Button
+            color="red"
+            className="w-[32px] h-[32px] cursor-pointer rounded-full p-0"
+            size="xs"
+            pill
+            onClick={handleDeleteClick}
+          >
+            <MdOutlineDelete className="w-4 h-4" />
+          </Button>
+        </div>
       </TableCell>
     </TableRow>
   );
