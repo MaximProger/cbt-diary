@@ -6,31 +6,45 @@ import { useForm, type SubmitHandler } from 'react-hook-form';
 import type { IAuthFormData } from '../../types';
 import { useState } from 'react';
 import { supabase } from '../../supabaseClient';
+import { useToast } from '@/hooks/useToast';
 
 const AuthDialog = () => {
-  const [loading, setLoading] = useState(false);
+  const toast = useToast();
+  const [isLoading, setIsLoading] = useState(false);
   const isShowDialog = useSelector((state: TRootState) => state.dialogs.isOpenAuthDialog);
   const dispatch = useDispatch();
 
   const {
+    reset,
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm<IAuthFormData>();
 
   const onClose = () => {
+    reset();
     dispatch(closeDialog('isOpenAuthDialog'));
   };
 
   const handleLogin: SubmitHandler<IAuthFormData> = async (data) => {
-    setLoading(true);
-    const { error } = await supabase.auth.signInWithOtp({ email: data.email });
-    if (error) {
-      alert(error.error_description || error.message);
-    } else {
-      alert('Check your email for the login link!');
+    if (isLoading) return;
+
+    setIsLoading(true);
+
+    try {
+      const { error } = await supabase.auth.signInWithOtp({ email: data.email });
+      if (error) {
+        toast.danger('Во время авторизации произошла ошибка!');
+      } else {
+        toast.success('Проверьте свой email для получения ссылки для входа!');
+        onClose(); // Закрыть диалог после успешной отправки
+      }
+    } catch (error) {
+      console.error('Auth error:', error);
+      toast.danger('Произошла неожиданная ошибка!');
+    } finally {
+      setIsLoading(false);
     }
-    setLoading(false);
   };
 
   return (
@@ -44,11 +58,12 @@ const AuthDialog = () => {
               <Label htmlFor="email">Адрес электронной почты</Label>
             </div>
             <TextInput
+              id="email"
               placeholder="Введите Email"
               {...register('email', {
                 required: 'Необходимо указать электронную почту',
                 pattern: {
-                  value: /\S+@\S+\.\S+/,
+                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
                   message: 'Введенное значение не соответствует формату электронной почты',
                 },
               })}
@@ -57,8 +72,8 @@ const AuthDialog = () => {
             {errors.email && <HelperText>{errors.email.message}</HelperText>}
           </div>
           <div className="w-full">
-            <Button className="cursor-pointer" type="submit" disabled={loading}>
-              Войти
+            <Button className="cursor-pointer" type="submit" disabled={!isValid || isLoading}>
+              {isLoading ? 'Отправка...' : 'Войти'}
             </Button>
           </div>
         </form>

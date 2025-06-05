@@ -1,6 +1,7 @@
-import { Button } from 'flowbite-react';
+import { Button, Select, TextInput } from 'flowbite-react';
 import { useDispatch } from 'react-redux';
 import { openDialog } from '../../store/dialogSlice';
+import { IoSearch } from 'react-icons/io5';
 
 const Pannel = () => {
   const dispatch = useDispatch();
@@ -10,8 +11,22 @@ const Pannel = () => {
   };
 
   return (
-    <div className="flex items-center">
-      <Button className="w-full cursor-pointer mb-10" onClick={openAddDialog}>
+    <div className="bg-(--bg-secondary) rounded-[12px] p-[20px] mb-[24px] shadow-[0_1px_3px_var(--shadow-light)] border-[1px] border-solid border-(--border-primary)">
+      <div className="flex gap-[16px] flex-wrap mb-[16px]">
+        <TextInput
+          className="max-w-full flex-auto"
+          icon={IoSearch}
+          id="search"
+          placeholder="Поиск по записям..."
+          required
+          inputMode="search"
+        />
+        <Select className="min-w-[180px]" id="sort" required>
+          <option>Сначала новые</option>
+          <option>Сначала старые</option>
+        </Select>
+      </div>
+      <Button size="sm" className="cursor-pointer" onClick={openAddDialog}>
         Добавить запись
       </Button>
     </div>

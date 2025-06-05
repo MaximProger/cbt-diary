@@ -78,15 +78,21 @@ const EditDialog = () => {
         <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
           <div>
             <div className="mb-2 block">
-              <Label htmlFor="email">Что самое худшее может случиться в этой ситуации</Label>
+              <Label htmlFor="worstCase">Что самое худшее может случиться в этой ситуации</Label>
             </div>
-            <Textarea rows={textAreaSize} className="resize-none" {...register('worstCase', { required: true })} />
+            <Textarea
+              id="worstCase"
+              rows={textAreaSize}
+              className="resize-none"
+              {...register('worstCase', { required: true })}
+            />
           </div>
           <div>
             <div className="mb-2 block">
-              <Label htmlFor="email">Какие самые плохие последствия могут быть у этой ситуации</Label>
+              <Label htmlFor="worstConsequences">Какие самые плохие последствия могут быть у этой ситуации</Label>
             </div>
             <Textarea
+              id="worstConsequences"
               rows={textAreaSize}
               className="resize-none"
               {...register('worstConsequences', { required: true })}
@@ -94,15 +100,25 @@ const EditDialog = () => {
           </div>
           <div>
             <div className="mb-2 block">
-              <Label htmlFor="email">Что я смогу сделать в этой ситуации</Label>
+              <Label htmlFor="whatCanIDo">Что я смогу сделать в этой ситуации</Label>
             </div>
-            <Textarea rows={textAreaSize} className="resize-none" {...register('whatCanIDo', { required: true })} />
+            <Textarea
+              id="whatCanIDo"
+              rows={textAreaSize}
+              className="resize-none"
+              {...register('whatCanIDo', { required: true })}
+            />
           </div>
           <div>
             <div className="mb-2 block">
-              <Label htmlFor="email">Как я справлюсь</Label>
+              <Label htmlFor="howWillICope">Как я справлюсь</Label>
             </div>
-            <Textarea rows={textAreaSize} className="resize-none" {...register('howWillICope', { required: true })} />
+            <Textarea
+              id="howWillICope"
+              rows={textAreaSize}
+              className="resize-none"
+              {...register('howWillICope', { required: true })}
+            />
           </div>
         </form>
       </ModalBody>

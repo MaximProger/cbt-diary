@@ -7,6 +7,7 @@ import { createEntry } from '../../store/entrySlice';
 import type { TAppDispatch, TRootState } from '../../store';
 import type { User } from '@supabase/supabase-js';
 import { useToast } from '@/hooks/useToast';
+import { useState } from 'react';
 
 const textAreaSize = 5;
 
@@ -18,6 +19,7 @@ const AddDialog = ({ user }: IProps) => {
   const toast = useToast();
   const isShowDialog = useSelector((state: TRootState) => state.dialogs.isOpenAddDialog);
   const dispatch: TAppDispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     register,
@@ -26,6 +28,7 @@ const AddDialog = ({ user }: IProps) => {
     reset,
   } = useForm<IFormData>();
   const onSubmit: SubmitHandler<IFormData> = async (formData) => {
+    setIsLoading(true);
     const entry = {
       created_at: new Date().toISOString(),
       created_by: user.id,
@@ -37,12 +40,14 @@ const AddDialog = ({ user }: IProps) => {
 
     try {
       await dispatch(createEntry(entry)).unwrap();
-
       handleDialogClose();
       reset();
+      toast.success('Запись успешно добавлена!');
     } catch (error) {
       console.error(error);
       toast.danger('Произошла ошибка при добавлении записи!');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -57,15 +62,21 @@ const AddDialog = ({ user }: IProps) => {
         <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
           <div>
             <div className="mb-2 block">
-              <Label htmlFor="email">Что самое худшее может случиться в этой ситуации</Label>
+              <Label htmlFor="worstCase">Что самое худшее может случиться в этой ситуации</Label>
             </div>
-            <Textarea rows={textAreaSize} className="resize-none" {...register('worstCase', { required: true })} />
+            <Textarea
+              id="worstCase"
+              rows={textAreaSize}
+              className="resize-none"
+              {...register('worstCase', { required: true })}
+            />
           </div>
           <div>
             <div className="mb-2 block">
-              <Label htmlFor="email">Какие самые плохие последствия могут быть у этой ситуации</Label>
+              <Label htmlFor="worstConsequences">Какие самые плохие последствия могут быть у этой ситуации</Label>
             </div>
             <Textarea
+              id="worstConsequences"
               rows={textAreaSize}
               className="resize-none"
               {...register('worstConsequences', { required: true })}
@@ -73,21 +84,31 @@ const AddDialog = ({ user }: IProps) => {
           </div>
           <div>
             <div className="mb-2 block">
-              <Label htmlFor="email">Что я смогу сделать в этой ситуации</Label>
+              <Label htmlFor="whatCanIDo">Что я смогу сделать в этой ситуации</Label>
             </div>
-            <Textarea rows={textAreaSize} className="resize-none" {...register('whatCanIDo', { required: true })} />
+            <Textarea
+              id="whatCanIDo"
+              rows={textAreaSize}
+              className="resize-none"
+              {...register('whatCanIDo', { required: true })}
+            />
           </div>
           <div>
             <div className="mb-2 block">
-              <Label htmlFor="email">Как я справлюсь</Label>
+              <Label htmlFor="howWillICope">Как я справлюсь</Label>
             </div>
-            <Textarea rows={textAreaSize} className="resize-none" {...register('howWillICope', { required: true })} />
+            <Textarea
+              id="howWillICope"
+              rows={textAreaSize}
+              className="resize-none"
+              {...register('howWillICope', { required: true })}
+            />
           </div>
         </form>
       </ModalBody>
       <ModalFooter>
-        <Button onClick={handleSubmit(onSubmit)} disabled={!isValid}>
-          Создать
+        <Button onClick={handleSubmit(onSubmit)} disabled={!isValid || isLoading}>
+          {isLoading ? 'Создание...' : 'Создать'}
         </Button>
         <Button color="gray" onClick={handleDialogClose}>
           Отмена

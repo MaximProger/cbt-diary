@@ -1,3 +1,35 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap');
+@import 'tailwindcss';
 @plugin "flowbite-react/plugin/tailwindcss";
 @source "../.flowbite-react/class-list.json";
+
+@theme {
+  --font-roboto: 'Roboto', sans-serif;
+
+  --bg-primary: #f8fafc;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #f1f5f9;
+  --bg-quaternary: #f8fafc;
+
+  --text-primary: #334155;
+  --text-secondary: #64748b;
+  --text-tertiary: #6b7280;
+  --text-quaternary: #374151;
+  --text-muted: #9ca3af;
+
+  --border-primary: #e2e8f0;
+  --border-secondary: #d1d5db;
+
+  --brand-primary: #3b82f6;
+  --brand-primary-hover: #2563eb;
+  --brand-secondary: #475569;
+
+  --success: #10b981;
+  --success-hover: #059669;
+  --danger: #ef4444;
+  --danger-hover: #dc2626;
+
+  --shadow-light: rgba(0, 0, 0, 0.1);
+  --shadow-medium: rgba(0, 0, 0, 0.1);
+  --focus-shadow: rgba(59, 130, 246, 0.1);
+}

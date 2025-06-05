@@ -17,6 +17,7 @@ import { HiInformationCircle } from 'react-icons/hi';
 import DeleteDialog from './components/DeleteDialog/DeleteDialog';
 import ToastContainer from './components/ToastContainer/ToastContainer';
 import EditDialog from './components/EditDialog/EditDialog';
+import EntriesList from './components/EntriesList/EntriesList';
 
 function App() {
   const [session, setSession] = useState<Session | null>(null);
@@ -46,7 +47,7 @@ function App() {
         <>
           <Pannel />
           {status === 'pending' && <Loader className="text-center" size="xl" />}
-          {status === 'fulfilled' && <DiaryTable />}
+          {status === 'fulfilled' && <EntriesList />}
           {error && (
             <Alert color="failure" icon={HiInformationCircle}>
               <span className="font-medium">Ошибка загрузки!</span> Во время загрузки записей возникла ошибка,
