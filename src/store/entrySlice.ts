@@ -25,8 +25,6 @@ export const createEntry = createAsyncThunk('entries/createEntry', async (entry:
 });
 
 export const deleteEntry = createAsyncThunk('entries/deleteEntry', async (id: number, { rejectWithValue }) => {
-  console.log(id);
-
   const { error } = await supabase.from('catostrafization_entries').delete().match({ id });
 
   if (error) {
@@ -78,9 +76,6 @@ const entrySlice = createSlice({
   name: 'entries',
   initialState,
   reducers: {
-    addEntry: (state, action) => {
-      state.entries.unshift(action.payload);
-    },
     setDeleteEntryId: (state, action) => {
       state.deleteEntryId = action.payload;
     },
@@ -101,22 +96,43 @@ const entrySlice = createSlice({
     });
     builder.addCase(fetchEntries.fulfilled, (state, action) => {
       state.status = 'fulfilled';
+      state.error = null;
       state.entries = action.payload;
     });
     builder.addCase(fetchEntries.rejected, (state, action) => setError(state, action));
+
+    builder.addCase(createEntry.pending, (state) => {
+      state.status = 'pending';
+      state.error = null;
+    });
     builder.addCase(createEntry.fulfilled, (state, action) => {
+      state.status = 'fulfilled';
+      state.error = null;
       state.entries.unshift(action.payload);
     });
-    builder.addCase(deleteEntry.fulfilled, (state, action) => {
-      console.log(action.payload);
+    builder.addCase(createEntry.rejected, (state, action) => setError(state, action));
 
+    builder.addCase(deleteEntry.pending, (state) => {
+      state.status = 'pending';
+      state.error = null;
+    });
+    builder.addCase(deleteEntry.fulfilled, (state, action) => {
+      state.status = 'fulfilled';
+      state.error = null;
       state.entries = state.entries.filter((entry) => entry.id !== action.payload);
+    });
+    builder.addCase(deleteEntry.rejected, (state, action) => setError(state, action));
+
+    builder.addCase(editEntry.pending, (state) => {
+      state.status = 'pending';
+      state.error = null;
     });
     builder.addCase(editEntry.fulfilled, (state, action) => {
       state.entries = state.entries.map((entry) => (entry.id === action.payload.id ? action.payload : entry));
     });
+    builder.addCase(editEntry.rejected, (state, action) => setError(state, action));
   },
 });
 
-export const { addEntry, setDeleteEntryId, clearDeleteEntryId, setEditEntryId, clearEditEntryId } = entrySlice.actions;
+export const { setDeleteEntryId, clearDeleteEntryId, setEditEntryId, clearEditEntryId } = entrySlice.actions;
 export default entrySlice.reducer;

@@ -19,11 +19,14 @@ const EditDialog = () => {
   const entry = entries.find((entry) => entry.id === editEntryId) || null;
   const [isLoading, setIsLoading] = useState(false);
 
+  const handleDialogClose = () => {
+    dispatch(closeDialog('isOpenEditDialog'));
+  };
+
   const {
     register,
     handleSubmit,
-    formState: { isValid },
-    watch,
+    formState: { isValid, isDirty },
     reset,
   } = useForm<IFormData>();
 
@@ -40,6 +43,8 @@ const EditDialog = () => {
 
   const onSubmit: SubmitHandler<IFormData> = async (formData) => {
     if (!entry) {
+      toast.danger('Запись не найдена');
+      handleDialogClose();
       return;
     }
 
@@ -57,17 +62,13 @@ const EditDialog = () => {
       await dispatch(editEntry(newEntry)).unwrap();
       handleDialogClose();
       reset();
-
       toast.success('Запись успешно отредактирована!');
-      setIsLoading(false);
     } catch (error) {
       console.error(error);
       toast.danger('Произошла ошибка при редактировании записи!');
+    } finally {
+      setIsLoading(false);
     }
-  };
-
-  const handleDialogClose = () => {
-    dispatch(closeDialog('isOpenEditDialog'));
   };
 
   return (
@@ -106,18 +107,8 @@ const EditDialog = () => {
         </form>
       </ModalBody>
       <ModalFooter>
-        <Button
-          onClick={handleSubmit(onSubmit)}
-          disabled={
-            isLoading ||
-            !isValid ||
-            (entry?.worst_case === watch('worstCase') &&
-              entry?.worst_consequences === watch('worstConsequences') &&
-              entry?.what_can_i_do === watch('whatCanIDo') &&
-              entry?.how_will_i_cope === watch('howWillICope'))
-          }
-        >
-          Сохранить
+        <Button onClick={handleSubmit(onSubmit)} disabled={isLoading || !isValid || !isDirty}>
+          {isLoading ? 'Сохранение...' : 'Сохранить'}
         </Button>
         <Button color="gray" onClick={handleDialogClose}>
           Отмена
