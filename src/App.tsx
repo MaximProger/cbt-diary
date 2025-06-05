@@ -1,6 +1,5 @@
 import './App.css';
 import AddDialog from './components/AddDialog/AddDialog';
-import DiaryTable from './components/DiaryTable/DiaryTable';
 import Layout from './components/Layout/Layout';
 import Pannel from './components/Pannel/Pannel';
 import Header from './components/Header/Header';
@@ -18,11 +17,12 @@ import DeleteDialog from './components/DeleteDialog/DeleteDialog';
 import ToastContainer from './components/ToastContainer/ToastContainer';
 import EditDialog from './components/EditDialog/EditDialog';
 import EntriesList from './components/EntriesList/EntriesList';
+import NoEntriesAlert from './components/NoEntriesAlert/NoEntriesAlert';
 
 function App() {
   const [session, setSession] = useState<Session | null>(null);
   const dispatch: TAppDispatch = useDispatch();
-  const { status, error } = useSelector((state: TRootState) => state.entries);
+  const { entries, status, error } = useSelector((state: TRootState) => state.entries);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -45,9 +45,14 @@ function App() {
       <Header session={session} />
       {session ? (
         <>
-          <Pannel />
           {status === 'pending' && <Loader className="text-center" size="xl" />}
-          {status === 'fulfilled' && <EntriesList />}
+          {status === 'fulfilled' && entries.length > 0 && (
+            <>
+              <Pannel />
+              <EntriesList />
+            </>
+          )}
+          {entries.length === 0 && status === 'fulfilled' && <NoEntriesAlert session={session} />}
           {error && (
             <Alert color="failure" icon={HiInformationCircle}>
               <span className="font-medium">Ошибка загрузки!</span> Во время загрузки записей возникла ошибка,
@@ -61,6 +66,8 @@ function App() {
       ) : (
         <></>
       )}
+
+      {!session && <NoEntriesAlert session={session} />}
       {!session && <AuthDialog />}
       <ToastContainer animation="bounce" />
     </Layout>

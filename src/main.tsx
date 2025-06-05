@@ -19,9 +19,14 @@ const customTheme = createTheme({
   textInput: {
     field: {
       input: {
+        base: 'rounded-[8px] transition-[outline-color]',
         colors: {
-          gray: 'bg-(--bg-secondary) border-[1px] border-solid border-(--border-secondary) rounded-[8px]',
+          // gray: 'bg-(--bg-secondary) border-[1px] border-solid border-(--border-secondary) ',
+          gray: 'bg-(--bg-quaternary) border-[1px] border-solid border-(--border-primary) text-(--text-tertiary)',
         },
+      },
+      textarea: {
+        base: 'rounded-[8px] transition-[outline-color]',
       },
     },
   },
@@ -33,6 +38,28 @@ const customTheme = createTheme({
           gray: 'bg-(--bg-secondary) border-[1px] border-solid border-(--border-secondary) rounded-[8px]',
         },
       },
+    },
+  },
+  modal: {
+    root: {
+      base: 'bg-red-500',
+    },
+    content: {
+      inner:
+        'bg-(--bg-secondary) shadow-[0_1px_3px_var(--shadow-light)] border-[1px] border-solid border-(--border-primary) rounded-[12px]',
+    },
+    header: {
+      base: 'p-[20px] border-(--border-primary)',
+      title: 'text-lg font-semibold text-(--brand-secondary)',
+      close: {
+        base: 'cursor-pointer transition-colors',
+      },
+    },
+    body: {
+      base: 'p-[20px]',
+    },
+    footer: {
+      base: 'p-[20px] border-(--border-primary)',
     },
   },
 });

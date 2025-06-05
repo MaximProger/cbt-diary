@@ -1,4 +1,4 @@
-import { Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, Textarea } from 'flowbite-react';
+import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'flowbite-react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { closeDialog } from '../../store/dialogSlice';
@@ -7,8 +7,8 @@ import { editEntry } from '../../store/entrySlice';
 import type { TAppDispatch, TRootState } from '../../store';
 import { useToast } from '@/hooks/useToast';
 import { useEffect, useState } from 'react';
-
-const textAreaSize = 5;
+import DialogTextarea from '../DialogTextarea/DialogTextarea';
+import DialogLabel from '../DialogLabel/DialogLabel';
 
 const EditDialog = () => {
   const toast = useToast();
@@ -77,56 +77,28 @@ const EditDialog = () => {
       <ModalBody>
         <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
           <div>
-            <div className="mb-2 block">
-              <Label htmlFor="worstCase">Что самое худшее может случиться в этой ситуации</Label>
-            </div>
-            <Textarea
-              id="worstCase"
-              rows={textAreaSize}
-              className="resize-none"
-              {...register('worstCase', { required: true })}
-            />
+            <DialogLabel id="worstCase">Что самое худшее может случиться в этой ситуации</DialogLabel>
+            <DialogTextarea id="worstCase" registerProps={register('worstCase', { required: true })} />
           </div>
           <div>
-            <div className="mb-2 block">
-              <Label htmlFor="worstConsequences">Какие самые плохие последствия могут быть у этой ситуации</Label>
-            </div>
-            <Textarea
-              id="worstConsequences"
-              rows={textAreaSize}
-              className="resize-none"
-              {...register('worstConsequences', { required: true })}
-            />
+            <DialogLabel id="worstConsequences">Какие самые плохие последствия могут быть у этой ситуации</DialogLabel>
+            <DialogTextarea id="worstConsequences" registerProps={register('worstConsequences', { required: true })} />
           </div>
           <div>
-            <div className="mb-2 block">
-              <Label htmlFor="whatCanIDo">Что я смогу сделать в этой ситуации</Label>
-            </div>
-            <Textarea
-              id="whatCanIDo"
-              rows={textAreaSize}
-              className="resize-none"
-              {...register('whatCanIDo', { required: true })}
-            />
+            <DialogLabel id="whatCanIDo">Что я смогу сделать в этой ситуации</DialogLabel>
+            <DialogTextarea id="whatCanIDo" registerProps={register('whatCanIDo', { required: true })} />
           </div>
           <div>
-            <div className="mb-2 block">
-              <Label htmlFor="howWillICope">Как я справлюсь</Label>
-            </div>
-            <Textarea
-              id="howWillICope"
-              rows={textAreaSize}
-              className="resize-none"
-              {...register('howWillICope', { required: true })}
-            />
+            <DialogLabel id="howWillICope">Как я справлюсь</DialogLabel>
+            <DialogTextarea id="howWillICope" registerProps={register('howWillICope', { required: true })} />
           </div>
         </form>
       </ModalBody>
       <ModalFooter>
-        <Button onClick={handleSubmit(onSubmit)} disabled={isLoading || !isValid || !isDirty}>
+        <Button size="md" onClick={handleSubmit(onSubmit)} disabled={isLoading || !isValid || !isDirty}>
           {isLoading ? 'Сохранение...' : 'Сохранить'}
         </Button>
-        <Button color="gray" onClick={handleDialogClose}>
+        <Button size="md" color="gray" onClick={handleDialogClose}>
           Отмена
         </Button>
       </ModalFooter>

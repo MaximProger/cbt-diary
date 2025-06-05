@@ -1,7 +1,19 @@
-import { Button, Select, TextInput } from 'flowbite-react';
+import { Button, createTheme, Select, TextInput } from 'flowbite-react';
 import { useDispatch } from 'react-redux';
 import { openDialog } from '../../store/dialogSlice';
 import { IoSearch } from 'react-icons/io5';
+
+const customTheme = createTheme({
+  textInput: {
+    field: {
+      input: {
+        colors: {
+          gray: 'bg-(--bg-secondary) border-[1px] border-solid border-(--border-secondary) ',
+        },
+      },
+    },
+  },
+});
 
 const Pannel = () => {
   const dispatch = useDispatch();
@@ -14,6 +26,7 @@ const Pannel = () => {
     <div className="bg-(--bg-secondary) rounded-[12px] p-[20px] mb-[24px] shadow-[0_1px_3px_var(--shadow-light)] border-[1px] border-solid border-(--border-primary)">
       <div className="flex gap-[16px] flex-wrap mb-[16px]">
         <TextInput
+          theme={customTheme.textInput}
           className="max-w-full flex-auto"
           icon={IoSearch}
           id="search"
@@ -26,7 +39,7 @@ const Pannel = () => {
           <option>Сначала старые</option>
         </Select>
       </div>
-      <Button size="sm" className="cursor-pointer" onClick={openAddDialog}>
+      <Button size="sm" onClick={openAddDialog}>
         Добавить запись
       </Button>
     </div>

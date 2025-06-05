@@ -36,7 +36,7 @@ const EntryItem = ({ entry }: IProps) => {
   return (
     <div
       className="bg-(--bg-secondary) rounded-[12px] p-[20px] shadow-[0_1px_3px_var(--shadow-light)] 
-    border-solid border-[1px] border-(--border-primary) transition-shadow"
+    border-solid border-[1px] border-(--border-primary) transition-shadow hover:shadow-[0_4px_12px_var(--shadow-medium)]"
     >
       <div className="flex justify-between items-start mb-[16px] gap-[12px]">
         <time className="block text-sm text-(--text-secondary) font-medium">{formattedDate}</time>

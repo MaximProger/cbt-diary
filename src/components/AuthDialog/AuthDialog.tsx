@@ -1,4 +1,4 @@
-import { Button, HelperText, Label, Modal, ModalBody, ModalHeader, TextInput } from 'flowbite-react';
+import { Button, HelperText, Modal, ModalBody, ModalFooter, ModalHeader, TextInput } from 'flowbite-react';
 import type { TRootState } from '../../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { closeDialog } from '../../store/dialogSlice';
@@ -7,6 +7,7 @@ import type { IAuthFormData } from '../../types';
 import { useState } from 'react';
 import { supabase } from '../../supabaseClient';
 import { useToast } from '@/hooks/useToast';
+import DialogLabel from '../DialogLabel/DialogLabel';
 
 const AuthDialog = () => {
   const toast = useToast();
@@ -48,15 +49,12 @@ const AuthDialog = () => {
   };
 
   return (
-    <Modal dismissible show={isShowDialog} size="md" onClose={onClose} popup>
-      <ModalHeader />
+    <Modal dismissible show={isShowDialog} size="md" onClose={onClose}>
+      <ModalHeader>Добро пожаловать!</ModalHeader>
       <ModalBody>
-        <form className="space-y-6" onSubmit={handleSubmit(handleLogin)}>
-          <h3 className="text-xl font-medium text-gray-900 dark:text-white">Добро пожаловать</h3>
+        <form onSubmit={handleSubmit(handleLogin)}>
           <div>
-            <div className="mb-2 block">
-              <Label htmlFor="email">Адрес электронной почты</Label>
-            </div>
+            <DialogLabel id="email">Адрес электронной почты</DialogLabel>
             <TextInput
               id="email"
               placeholder="Введите Email"
@@ -67,17 +65,23 @@ const AuthDialog = () => {
                   message: 'Введенное значение не соответствует формату электронной почты',
                 },
               })}
-              color={errors.email ? 'failure' : ''}
+              color={errors.email ? 'failure' : 'gray'}
             />
             {errors.email && <HelperText>{errors.email.message}</HelperText>}
           </div>
-          <div className="w-full">
-            <Button className="cursor-pointer" type="submit" disabled={!isValid || isLoading}>
-              {isLoading ? 'Отправка...' : 'Войти'}
-            </Button>
-          </div>
         </form>
       </ModalBody>
+      <ModalFooter>
+        <Button
+          size="md"
+          className="cursor-pointer"
+          type="submit"
+          disabled={!isValid || isLoading}
+          onClick={handleSubmit(handleLogin)}
+        >
+          {isLoading ? 'Отправка...' : 'Войти'}
+        </Button>
+      </ModalFooter>
     </Modal>
   );
 };
