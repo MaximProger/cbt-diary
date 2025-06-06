@@ -1,18 +1,38 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import type { IEntry, IEntryCreate } from '../types';
 import { supabase } from '../supabaseClient';
+import { ENTRIES_LIMIT } from '@/constants';
+import type { TRootState } from '.';
 
 export const fetchEntries = createAsyncThunk('entries/fetchEntries', async (_, { rejectWithValue }) => {
-  const { data, error } = await supabase
+  const { data, error, count } = await supabase
     .from('catostrafization_entries')
-    .select()
-    .order('created_at', { ascending: false });
+    .select('*', { count: 'exact' })
+    .order('created_at', { ascending: false })
+    .range(0, ENTRIES_LIMIT - 1);
 
   if (error) {
     return rejectWithValue(error.message);
   }
 
-  return data;
+  return { data, count };
+});
+
+export const loadMoreEntries = createAsyncThunk('entries/loadMoreEntries', async (_, { getState, rejectWithValue }) => {
+  const state = getState() as TRootState;
+  const currentLength = state.entries.entries.length;
+
+  const { data, error } = await supabase
+    .from('catostrafization_entries')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .range(currentLength, currentLength + ENTRIES_LIMIT - 1);
+
+  if (error) {
+    return rejectWithValue(error.message);
+  }
+
+  return { data };
 });
 
 export const createEntry = createAsyncThunk('entries/createEntry', async (entry: IEntryCreate, { rejectWithValue }) => {
@@ -46,7 +66,9 @@ export const editEntry = createAsyncThunk('entries/editEntry', async (entry: IEn
 
 interface IInitialState {
   entries: IEntry[];
+  entriesCount: number;
   status: 'pending' | 'fulfilled' | 'rejected' | null;
+  loadMoreStatus: 'idle' | 'pending' | 'fulfilled' | 'rejected';
   error: string | null;
   deleteEntryId: number | null;
   editEntryId: number | null;
@@ -54,6 +76,8 @@ interface IInitialState {
 
 const initialState: IInitialState = {
   entries: [],
+  entriesCount: 0,
+  loadMoreStatus: 'idle',
   status: null,
   error: null,
   deleteEntryId: null,
@@ -97,9 +121,19 @@ const entrySlice = createSlice({
     builder.addCase(fetchEntries.fulfilled, (state, action) => {
       state.status = 'fulfilled';
       state.error = null;
-      state.entries = action.payload;
+      state.entries = action.payload.data;
+      state.entriesCount = action.payload.count as number;
     });
     builder.addCase(fetchEntries.rejected, (state, action) => setError(state, action));
+
+    builder.addCase(loadMoreEntries.pending, (state) => {
+      state.loadMoreStatus = 'pending';
+    });
+    builder.addCase(loadMoreEntries.fulfilled, (state, action) => {
+      state.loadMoreStatus = 'fulfilled';
+      state.entries = [...state.entries, ...action.payload.data]; // добавляем
+    });
+    builder.addCase(loadMoreEntries.rejected, (state, action) => setError(state, action));
 
     builder.addCase(createEntry.pending, (state) => {
       state.status = 'pending';

@@ -1,29 +1,27 @@
 import { Button } from 'flowbite-react';
 import EntryItem from './EntryItem/EntryItem';
-import { useSelector } from 'react-redux';
-import type { TRootState } from '@/store';
-import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import type { TAppDispatch, TRootState } from '@/store';
 import type { IEntry } from '@/types';
-
-const DEFAULT_VISIBLE_ENTRIES_LIMIT = 5;
+import { loadMoreEntries } from '@/store/entrySlice';
 
 const EntriesList = () => {
   const entries: IEntry[] = useSelector((state: TRootState) => state.entries.entries);
-
-  const [visibleEntriesLimit, setVisibleEntriesLimit] = useState<number>(DEFAULT_VISIBLE_ENTRIES_LIMIT);
+  const count = useSelector((state: TRootState) => state.entries.entriesCount);
+  const dispatch: TAppDispatch = useDispatch();
 
   const loadMore = () => {
-    setVisibleEntriesLimit((prev) => prev + DEFAULT_VISIBLE_ENTRIES_LIMIT);
+    dispatch(loadMoreEntries());
   };
 
   return (
     <div className="">
       <div className="flex flex-col gap-[16px]">
-        {entries.slice(0, visibleEntriesLimit).map((entry) => (
+        {entries.map((entry) => (
           <EntryItem key={entry.id} entry={entry} />
         ))}
       </div>
-      {entries.length > visibleEntriesLimit && (
+      {entries.length < count && (
         <Button color="light" className="mt-[32px] mx-auto" onClick={loadMore}>
           Показать ещё записи
         </Button>
