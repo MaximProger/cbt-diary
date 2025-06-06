@@ -22,7 +22,7 @@ import NoEntriesAlert from './components/NoEntriesAlert/NoEntriesAlert';
 function App() {
   const [session, setSession] = useState<Session | null>(null);
   const dispatch: TAppDispatch = useDispatch();
-  const { entries, status, error } = useSelector((state: TRootState) => state.entries);
+  const { entries, status, error, isInitialLoading } = useSelector((state: TRootState) => state.entries);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -40,19 +40,31 @@ function App() {
     dispatch(fetchEntries());
   }, [dispatch]);
 
+  if (isInitialLoading) {
+    return (
+      <Layout>
+        <div className="flex items-center justify-center h-full">
+          <Loader className="h-[80px] w-[80px]" />
+        </div>
+      </Layout>
+    );
+  }
+
   return (
     <Layout>
       <Header session={session} />
       {session ? (
         <>
           <Pannel />
-          {status === 'pending' && <Loader className="text-center" size="xl" />}
+          {status === 'pending' && !isInitialLoading && (
+            <Loader wrapperClassName="text-center mt-20" className="h-[80px] w-[80px]" />
+          )}
           {status === 'fulfilled' && entries.length > 0 && <EntriesList />}
           {entries.length === 0 && status === 'fulfilled' && <NoEntriesAlert session={session} />}
           {error && (
             <Alert color="failure" icon={HiInformationCircle}>
               <span className="font-medium">Ошибка загрузки!</span> Во время загрузки записей возникла ошибка,
-              попробуйте позже
+              попробуйте позже
             </Alert>
           )}
           <AddDialog user={session.user} />
@@ -60,11 +72,11 @@ function App() {
           <DeleteDialog />
         </>
       ) : (
-        <></>
+        <>
+          <NoEntriesAlert session={session} />
+          <AuthDialog />
+        </>
       )}
-
-      {!session && <NoEntriesAlert session={session} />}
-      {!session && <AuthDialog />}
       <ToastContainer animation="bounce" />
     </Layout>
   );

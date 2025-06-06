@@ -35,7 +35,7 @@ const customTheme = createTheme({
       select: {
         base: 'cursor-pointer',
         colors: {
-          gray: 'bg-(--bg-secondary) border-[1px] border-solid border-(--border-secondary) rounded-[8px]',
+          gray: 'bg-(--bg-secondary) border-[1px] border-solid border-(--border-secondary) rounded-[8px] focus:border-(--brand-primary) focus:ring-(--brand-primary)',
         },
       },
     },
@@ -60,6 +60,11 @@ const customTheme = createTheme({
     },
     footer: {
       base: 'p-[20px] border-(--border-primary)',
+    },
+  },
+  spinner: {
+    color: {
+      default: 'fill-(--brand-primary)',
     },
   },
 });

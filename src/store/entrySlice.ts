@@ -93,6 +93,7 @@ interface IInitialState {
   editEntryId: number | null;
   searchTerm: string;
   sortValue: 'new' | 'old';
+  isInitialLoading: boolean;
 }
 
 const initialState: IInitialState = {
@@ -105,6 +106,7 @@ const initialState: IInitialState = {
   editEntryId: null,
   searchTerm: '',
   sortValue: 'new',
+  isInitialLoading: true,
 };
 
 const setError = (
@@ -152,11 +154,15 @@ const entrySlice = createSlice({
     });
     builder.addCase(fetchEntries.fulfilled, (state, action) => {
       state.status = 'fulfilled';
+      state.isInitialLoading = false;
       state.error = null;
       state.entries = action.payload.data;
       state.entriesCount = action.payload.count as number;
     });
-    builder.addCase(fetchEntries.rejected, (state, action) => setError(state, action));
+    builder.addCase(fetchEntries.rejected, (state, action) => {
+      setError(state, action);
+      state.isInitialLoading = false;
+    });
 
     builder.addCase(loadMoreEntries.pending, (state) => {
       state.loadMoreStatus = 'pending';
