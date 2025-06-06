@@ -45,13 +45,9 @@ function App() {
       <Header session={session} />
       {session ? (
         <>
+          <Pannel />
           {status === 'pending' && <Loader className="text-center" size="xl" />}
-          {status === 'fulfilled' && entries.length > 0 && (
-            <>
-              <Pannel />
-              <EntriesList />
-            </>
-          )}
+          {status === 'fulfilled' && entries.length > 0 && <EntriesList />}
           {entries.length === 0 && status === 'fulfilled' && <NoEntriesAlert session={session} />}
           {error && (
             <Alert color="failure" icon={HiInformationCircle}>

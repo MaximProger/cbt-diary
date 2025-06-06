@@ -4,34 +4,49 @@ import { supabase } from '../supabaseClient';
 import { ENTRIES_LIMIT } from '@/constants';
 import type { TRootState } from '.';
 
-export const fetchEntries = createAsyncThunk('entries/fetchEntries', async (_, { rejectWithValue }) => {
-  const { data, error, count } = await supabase
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const buildSearchQuery = (baseQuery: any, searchTerm: string) => {
+  const trimmedTerm = searchTerm.trim();
+
+  if (trimmedTerm.length <= 2) {
+    return baseQuery;
+  }
+
+  return baseQuery.or(
+    `worst_case.ilike.%${trimmedTerm}%,worst_consequences.ilike.%${trimmedTerm}%,what_can_i_do.ilike.%${trimmedTerm}%,how_will_i_cope.ilike.%${trimmedTerm}%`,
+  );
+};
+
+export const fetchEntries = createAsyncThunk('entries/fetchEntries', async (_, { getState, rejectWithValue }) => {
+  const state = getState() as TRootState;
+  const searchTerm = state.entries.searchTerm;
+
+  const baseQuery = supabase
     .from('catostrafization_entries')
     .select('*', { count: 'exact' })
     .order('created_at', { ascending: false })
     .range(0, ENTRIES_LIMIT - 1);
 
-  if (error) {
-    return rejectWithValue(error.message);
-  }
+  const { data, error, count } = await buildSearchQuery(baseQuery, searchTerm);
 
+  if (error) return rejectWithValue(error.message);
   return { data, count };
 });
 
 export const loadMoreEntries = createAsyncThunk('entries/loadMoreEntries', async (_, { getState, rejectWithValue }) => {
   const state = getState() as TRootState;
   const currentLength = state.entries.entries.length;
+  const searchTerm = state.entries.searchTerm;
 
-  const { data, error } = await supabase
+  const baseQuery = supabase
     .from('catostrafization_entries')
     .select('*')
     .order('created_at', { ascending: false })
     .range(currentLength, currentLength + ENTRIES_LIMIT - 1);
 
-  if (error) {
-    return rejectWithValue(error.message);
-  }
+  const { data, error } = await buildSearchQuery(baseQuery, searchTerm);
 
+  if (error) return rejectWithValue(error.message);
   return { data };
 });
 
@@ -72,6 +87,7 @@ interface IInitialState {
   error: string | null;
   deleteEntryId: number | null;
   editEntryId: number | null;
+  searchTerm: string;
 }
 
 const initialState: IInitialState = {
@@ -82,6 +98,7 @@ const initialState: IInitialState = {
   error: null,
   deleteEntryId: null,
   editEntryId: null,
+  searchTerm: '',
 };
 
 const setError = (
@@ -112,6 +129,12 @@ const entrySlice = createSlice({
     clearEditEntryId: (state) => {
       state.editEntryId = null;
     },
+    setSearchTerm: (state, action) => {
+      state.searchTerm = action.payload;
+    },
+    clearSearchTerm: (state) => {
+      state.searchTerm = '';
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchEntries.pending, (state) => {
@@ -131,7 +154,7 @@ const entrySlice = createSlice({
     });
     builder.addCase(loadMoreEntries.fulfilled, (state, action) => {
       state.loadMoreStatus = 'fulfilled';
-      state.entries = [...state.entries, ...action.payload.data]; // добавляем
+      state.entries = [...state.entries, ...action.payload.data];
     });
     builder.addCase(loadMoreEntries.rejected, (state, action) => setError(state, action));
 
@@ -168,5 +191,12 @@ const entrySlice = createSlice({
   },
 });
 
-export const { setDeleteEntryId, clearDeleteEntryId, setEditEntryId, clearEditEntryId } = entrySlice.actions;
+export const {
+  setDeleteEntryId,
+  clearDeleteEntryId,
+  setEditEntryId,
+  clearEditEntryId,
+  setSearchTerm,
+  clearSearchTerm,
+} = entrySlice.actions;
 export default entrySlice.reducer;

@@ -17,6 +17,10 @@ export type IFormData = {
   howWillICope: string;
 };
 
+export type ISearchFormData = {
+  search: string;
+};
+
 export type IAuthFormData = {
   email: string;
 };
