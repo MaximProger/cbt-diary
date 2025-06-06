@@ -20,11 +20,13 @@ const buildSearchQuery = (baseQuery: any, searchTerm: string) => {
 export const fetchEntries = createAsyncThunk('entries/fetchEntries', async (_, { getState, rejectWithValue }) => {
   const state = getState() as TRootState;
   const searchTerm = state.entries.searchTerm;
+  const sortValue = state.entries.sortValue;
+  const ascending = sortValue !== 'new';
 
   const baseQuery = supabase
     .from('catostrafization_entries')
     .select('*', { count: 'exact' })
-    .order('created_at', { ascending: false })
+    .order('created_at', { ascending })
     .range(0, ENTRIES_LIMIT - 1);
 
   const { data, error, count } = await buildSearchQuery(baseQuery, searchTerm);
@@ -37,11 +39,13 @@ export const loadMoreEntries = createAsyncThunk('entries/loadMoreEntries', async
   const state = getState() as TRootState;
   const currentLength = state.entries.entries.length;
   const searchTerm = state.entries.searchTerm;
+  const sortValue = state.entries.sortValue;
+  const ascending = sortValue !== 'new';
 
   const baseQuery = supabase
     .from('catostrafization_entries')
     .select('*')
-    .order('created_at', { ascending: false })
+    .order('created_at', { ascending })
     .range(currentLength, currentLength + ENTRIES_LIMIT - 1);
 
   const { data, error } = await buildSearchQuery(baseQuery, searchTerm);
@@ -88,6 +92,7 @@ interface IInitialState {
   deleteEntryId: number | null;
   editEntryId: number | null;
   searchTerm: string;
+  sortValue: 'new' | 'old';
 }
 
 const initialState: IInitialState = {
@@ -99,6 +104,7 @@ const initialState: IInitialState = {
   deleteEntryId: null,
   editEntryId: null,
   searchTerm: '',
+  sortValue: 'new',
 };
 
 const setError = (
@@ -134,6 +140,9 @@ const entrySlice = createSlice({
     },
     clearSearchTerm: (state) => {
       state.searchTerm = '';
+    },
+    setAscending: (state, action) => {
+      state.sortValue = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -198,5 +207,6 @@ export const {
   clearEditEntryId,
   setSearchTerm,
   clearSearchTerm,
+  setAscending,
 } = entrySlice.actions;
 export default entrySlice.reducer;

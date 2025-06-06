@@ -4,9 +4,9 @@ import { openDialog } from '../../store/dialogSlice';
 import { IoSearch } from 'react-icons/io5';
 import type { ISearchFormData } from '@/types';
 import { useForm } from 'react-hook-form';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
-import { fetchEntries, setSearchTerm } from '@/store/entrySlice';
+import { fetchEntries, setAscending, setSearchTerm } from '@/store/entrySlice';
 import type { TAppDispatch } from '@/store';
 
 const customTheme = createTheme({
@@ -28,13 +28,11 @@ const Pannel = () => {
     dispatch(openDialog('isOpenAddDialog'));
   };
 
-  const {
-    register,
-    formState: { isValid },
-    watch,
-  } = useForm<ISearchFormData>();
+  const { register, watch } = useForm<ISearchFormData>();
 
   const searchValue = watch('search');
+  const sortValue = watch('sort');
+  const prevSortValue = useRef(sortValue);
 
   const debouncedSearch = useDebouncedCallback((value: string) => {
     const trimmedValue = value.trim();
@@ -45,6 +43,14 @@ const Pannel = () => {
   useEffect(() => {
     debouncedSearch(searchValue);
   }, [searchValue, debouncedSearch]);
+
+  useEffect(() => {
+    if (prevSortValue.current !== sortValue && prevSortValue.current !== undefined) {
+      dispatch(setAscending(sortValue));
+      dispatch(fetchEntries());
+    }
+    prevSortValue.current = sortValue;
+  }, [dispatch, sortValue]);
 
   return (
     <div className="bg-(--bg-secondary) rounded-[12px] p-[20px] mb-[24px] shadow-[0_1px_3px_var(--shadow-light)] border-[1px] border-solid border-(--border-primary)">
@@ -58,9 +64,9 @@ const Pannel = () => {
           inputMode="search"
           {...register('search', { required: true })}
         />
-        <Select className="min-w-[180px]" id="sort" required>
-          <option>Сначала новые</option>
-          <option>Сначала старые</option>
+        <Select className="min-w-[180px]" id="sort" {...register('sort')} required>
+          <option value="new">Сначала новые</option>
+          <option value="old">Сначала старые</option>
         </Select>
       </div>
       <Button size="sm" onClick={openAddDialog}>

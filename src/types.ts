@@ -19,6 +19,7 @@ export type IFormData = {
 
 export type ISearchFormData = {
   search: string;
+  sort: boolean;
 };
 
 export type IAuthFormData = {
