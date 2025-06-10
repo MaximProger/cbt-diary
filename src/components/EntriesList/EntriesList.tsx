@@ -16,13 +16,13 @@ const EntriesList = () => {
 
   return (
     <div className="">
-      <div className="flex flex-col gap-[16px]">
+      <div className="flex flex-col gap-[16px] max-md:gap-[12px]">
         {entries.map((entry) => (
           <EntryItem key={entry.id} entry={entry} />
         ))}
       </div>
       {entries.length < count && (
-        <Button color="light" className="mt-[32px] mx-auto" onClick={loadMore}>
+        <Button color="light" className="mt-[32px] mx-auto max-md:mt-[16px]" onClick={loadMore}>
           Показать ещё записи
         </Button>
       )}

@@ -9,7 +9,7 @@ const Layout = ({ children }: IProps) => {
   return (
     <div
       className="font-(family-name:--font-roboto)
- bg-(--bg-primary) min-h-screen flex justify-center py-[24px]"
+ bg-(--bg-primary) min-h-screen flex justify-center py-[24px] max-md:py-[12px]"
     >
       <Container>{children}</Container>
     </div>

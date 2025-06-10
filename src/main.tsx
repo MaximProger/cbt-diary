@@ -49,17 +49,17 @@ const customTheme = createTheme({
         'bg-(--bg-secondary) shadow-[0_1px_3px_var(--shadow-light)] border-[1px] border-solid border-(--border-primary) rounded-[12px]',
     },
     header: {
-      base: 'p-[20px] border-(--border-primary)',
+      base: 'p-[20px] border-(--border-primary) max-md:p-[12px]',
       title: 'text-lg font-semibold text-(--brand-secondary)',
       close: {
         base: 'cursor-pointer transition-colors',
       },
     },
     body: {
-      base: 'p-[20px]',
+      base: 'p-[20px] max-md:p-[12px]',
     },
     footer: {
-      base: 'p-[20px] border-(--border-primary)',
+      base: 'p-[20px] border-(--border-primary) max-md:p-[12px]',
     },
   },
   spinner: {

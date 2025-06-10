@@ -3,6 +3,7 @@ import { openDialog } from '@/store/dialogSlice';
 import { setDeleteEntryId, setEditEntryId } from '@/store/entrySlice';
 import type { IEntry } from '@/types';
 import { Button } from 'flowbite-react';
+import { MdDelete, MdEdit } from 'react-icons/md';
 import { useDispatch } from 'react-redux';
 
 interface IProps {
@@ -36,20 +37,20 @@ const EntryItem = ({ entry }: IProps) => {
   return (
     <div
       className="bg-(--bg-secondary) rounded-[12px] p-[20px] shadow-[0_1px_3px_var(--shadow-light)] 
-    border-solid border-[1px] border-(--border-primary) transition-shadow hover:shadow-[0_4px_12px_var(--shadow-medium)]"
+    border-solid border-[1px] border-(--border-primary) transition-shadow hover:shadow-[0_4px_12px_var(--shadow-medium)] max-md:p-[12px]"
     >
       <div className="flex justify-between items-start mb-[16px] gap-[12px]">
         <time className="block text-sm text-(--text-secondary) font-medium">{formattedDate}</time>
         <div className="flex gap-[6px]">
           <Button size="xs" color="green" className="h-7" onClick={handleEditClick}>
-            Изменить
+            <span className="max-md:hidden">Изменить</span> <MdEdit className="hidden w-4 h-4 max-md:block" />
           </Button>
           <Button size="xs" color="red" className="h-7" onClick={handleDeleteClick}>
-            Удалить
+            <span className="max-md:hidden">Удалить</span> <MdDelete className="hidden w-4 h-4 max-md:block" />
           </Button>
         </div>
       </div>
-      <div className="grid grid-cols-4 gap-[16px]">
+      <div className="grid grid-cols-4 gap-[16px] max-lg:grid-cols-2 max-md:grid-cols-1 max-md:gap-[12px]">
         <div className="bg-(--bg-quaternary) p-[16px] rounded-[8px] border-[1px] border-solid border-(--border-primary)">
           <div className="font-semibold mb-[8px] text-(--text-quaternary) text-sm">
             Что самое худшее может случиться

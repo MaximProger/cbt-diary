@@ -53,8 +53,8 @@ const Pannel = () => {
   }, [dispatch, sortValue]);
 
   return (
-    <div className="bg-(--bg-secondary) rounded-[12px] p-[20px] mb-[24px] shadow-[0_1px_3px_var(--shadow-light)] border-[1px] border-solid border-(--border-primary)">
-      <div className="flex gap-[16px] flex-wrap mb-[16px]">
+    <div className="bg-(--bg-secondary) rounded-[12px] p-[20px] mb-[24px] shadow-[0_1px_3px_var(--shadow-light)] border-[1px] border-solid border-(--border-primary) max-md:mb-[12px] max-md:p-[12px]">
+      <div className="flex gap-[16px] flex-wrap mb-[16px] max-md:gap-[12px] max-md:mb-[12px]">
         <TextInput
           theme={customTheme.textInput}
           className="max-w-full flex-auto"
@@ -64,12 +64,12 @@ const Pannel = () => {
           inputMode="search"
           {...register('search', { required: true })}
         />
-        <Select className="min-w-[180px]" id="sort" {...register('sort')} required>
+        <Select className="min-w-[180px] max-md:w-full" id="sort" {...register('sort')} required>
           <option value="new">Сначала новые</option>
           <option value="old">Сначала старые</option>
         </Select>
       </div>
-      <Button size="sm" onClick={openAddDialog}>
+      <Button className="max-md:w-full" size="sm" onClick={openAddDialog}>
         Добавить запись
       </Button>
     </div>
