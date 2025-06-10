@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import type { Session } from '@supabase/supabase-js';
 import { supabase } from '../../supabaseClient';
 import { MdLightMode, MdDarkMode, MdLogout, MdLogin } from 'react-icons/md';
+import { useTheme } from '@/hooks/useTheme';
 
 interface IProps {
   session: Session | null;
@@ -16,6 +17,7 @@ const Header = ({ session }: IProps) => {
   };
 
   const logout = () => supabase.auth.signOut();
+  const { isDarkMode, toggle } = useTheme();
 
   return (
     <header className="bg-(--bg-secondary) border-solid border-[1px] border-(--border-primary) rounded-[12px] p-[20px_24px] mb-[24px] shadow-[0_1px_3px_var(--shadow-light)] flex justify-between items-center flex-wrap gap-[16px] max-md:p-[12px] max-md:mb-[12px] max-md:gap-[12px]">
@@ -37,8 +39,8 @@ const Header = ({ session }: IProps) => {
             <span className="max-md:hidden">Войти</span> <MdLogin className="hidden w-4 h-4 max-md:block" />
           </Button>
         )}
-        <Button color="gray" size="sm">
-          <MdDarkMode className="w-4 h-4" />
+        <Button color="gray" size="sm" onClick={toggle}>
+          {isDarkMode ? <MdLightMode className="w-4 h-4" /> : <MdDarkMode className="w-4 h-4" />}
         </Button>
       </div>
     </header>

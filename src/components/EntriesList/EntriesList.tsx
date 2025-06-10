@@ -15,7 +15,7 @@ const EntriesList = () => {
   };
 
   return (
-    <div className="">
+    <>
       <div className="flex flex-col gap-[16px] max-md:gap-[12px]">
         {entries.map((entry) => (
           <EntryItem key={entry.id} entry={entry} />
@@ -26,7 +26,7 @@ const EntriesList = () => {
           Показать ещё записи
         </Button>
       )}
-    </div>
+    </>
   );
 };
 
