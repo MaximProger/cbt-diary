@@ -41,6 +41,8 @@ const Pannel = () => {
   }, 1000);
 
   useEffect(() => {
+    if (!searchValue || !searchValue.trim()) return;
+
     debouncedSearch(searchValue);
   }, [searchValue, debouncedSearch]);
 

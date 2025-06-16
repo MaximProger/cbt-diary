@@ -1,9 +1,9 @@
-import { Button } from 'flowbite-react';
+import { Button, Tooltip } from 'flowbite-react';
 import { openDialog } from '../../store/dialogSlice';
 import { useDispatch } from 'react-redux';
 import type { Session } from '@supabase/supabase-js';
 import { supabase } from '../../supabaseClient';
-import { MdLightMode, MdDarkMode, MdLogout, MdLogin } from 'react-icons/md';
+import { MdLightMode, MdDarkMode, MdLogout, MdLogin, MdInfo } from 'react-icons/md';
 import { useTheme } from '@/hooks/useTheme';
 
 interface IProps {
@@ -12,8 +12,12 @@ interface IProps {
 
 const Header = ({ session }: IProps) => {
   const dispatch = useDispatch();
-  const openAuthDialog = () => {
+  const openAuthDialogHandler = () => {
     dispatch(openDialog('isOpenAuthDialog'));
+  };
+
+  const openInfoDialogHandler = () => {
+    dispatch(openDialog('isOpenInfoDialog'));
   };
 
   const logout = () => supabase.auth.signOut();
@@ -35,12 +39,17 @@ const Header = ({ session }: IProps) => {
             <span className="max-md:hidden">Выйти</span> <MdLogout className="hidden w-4 h-4 max-md:block" />
           </Button>
         ) : (
-          <Button size="sm" onClick={openAuthDialog}>
+          <Button size="sm" onClick={openAuthDialogHandler}>
             <span className="max-md:hidden">Войти</span> <MdLogin className="hidden w-4 h-4 max-md:block" />
           </Button>
         )}
-        <Button color="gray" size="sm" onClick={toggle}>
-          {isDarkMode ? <MdLightMode className="w-4 h-4" /> : <MdDarkMode className="w-4 h-4" />}
+        <Tooltip content={isDarkMode ? 'Светлая тема' : 'Темная тема'} placement="bottom" style="dark">
+          <Button color="gray" size="sm" onClick={toggle}>
+            {isDarkMode ? <MdLightMode className="w-4 h-4" /> : <MdDarkMode className="w-4 h-4" />}
+          </Button>
+        </Tooltip>
+        <Button color="gray" size="sm" onClick={openInfoDialogHandler}>
+          <MdInfo className="w-4 h-4" />
         </Button>
       </div>
     </header>

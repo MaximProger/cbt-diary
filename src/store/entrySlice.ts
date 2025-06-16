@@ -59,7 +59,7 @@ export const createEntry = createAsyncThunk('entries/createEntry', async (entry:
   if (error) {
     return rejectWithValue(error.message);
   }
-
+  console.log('Created entry data:', data);
   return data;
 });
 
@@ -79,6 +79,8 @@ export const editEntry = createAsyncThunk('entries/editEntry', async (entry: IEn
   if (error) {
     return rejectWithValue(error.message);
   }
+
+  console.log('edit entry', entry);
 
   return data[0];
 });
@@ -200,6 +202,8 @@ const entrySlice = createSlice({
       state.error = null;
     });
     builder.addCase(editEntry.fulfilled, (state, action) => {
+      state.status = 'fulfilled';
+      state.error = null;
       state.entries = state.entries.map((entry) => (entry.id === action.payload.id ? action.payload : entry));
     });
     builder.addCase(editEntry.rejected, (state, action) => setError(state, action));

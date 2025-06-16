@@ -5,6 +5,7 @@ const initialState = {
   isOpenAuthDialog: false,
   isOpenDeleteDialog: false,
   isOpenEditDialog: false,
+  isOpenInfoDialog: false,
 };
 
 const dialogSlice = createSlice({

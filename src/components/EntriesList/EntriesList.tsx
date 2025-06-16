@@ -4,8 +4,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import type { TAppDispatch, TRootState } from '@/store';
 import type { IEntry } from '@/types';
 import { loadMoreEntries } from '@/store/entrySlice';
+import clsx from 'clsx';
 
-const EntriesList = () => {
+interface IProps {
+  isLoading: boolean;
+}
+
+const EntriesList = ({ isLoading }: IProps) => {
   const entries: IEntry[] = useSelector((state: TRootState) => state.entries.entries);
   const count = useSelector((state: TRootState) => state.entries.entriesCount);
   const dispatch: TAppDispatch = useDispatch();
@@ -16,7 +21,7 @@ const EntriesList = () => {
 
   return (
     <>
-      <div className="flex flex-col gap-[16px] max-md:gap-[12px]">
+      <div className={clsx('flex flex-col gap-[16px] max-md:gap-[12px]', isLoading && 'animate-pulse')}>
         {entries.map((entry) => (
           <EntryItem key={entry.id} entry={entry} />
         ))}

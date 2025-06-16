@@ -19,6 +19,7 @@ import EditDialog from './components/EditDialog/EditDialog';
 import EntriesList from './components/EntriesList/EntriesList';
 import NoEntriesAlert from './components/NoEntriesAlert/NoEntriesAlert';
 import { useThemeInitializer } from './hooks/useThemeInitializer';
+import InfoDialog from './components/InfoDialog/InfoDialog';
 
 function App() {
   const [session, setSession] = useState<Session | null>(null);
@@ -59,10 +60,7 @@ function App() {
       {session ? (
         <>
           <Pannel />
-          {status === 'pending' && !isInitialLoading && (
-            <Loader wrapperClassName="text-center mt-20" className="h-[80px] w-[80px]" />
-          )}
-          {status === 'fulfilled' && entries.length > 0 && <EntriesList />}
+          {entries.length > 0 && <EntriesList isLoading={status === 'pending'} />}
           {entries.length === 0 && status === 'fulfilled' && <NoEntriesAlert session={session} />}
           {error && (
             <Alert color="failure" icon={HiInformationCircle}>
@@ -81,6 +79,7 @@ function App() {
         </>
       )}
       <ToastContainer animation="bounce" />
+      <InfoDialog />
     </Layout>
   );
 }
