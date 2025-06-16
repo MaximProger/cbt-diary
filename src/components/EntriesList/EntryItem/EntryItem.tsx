@@ -42,10 +42,10 @@ const EntryItem = ({ entry }: IProps) => {
       <div className="flex justify-between items-start mb-[16px] gap-[12px]">
         <time className="block text-sm text-(--text-secondary) font-medium">{formattedDate}</time>
         <div className="flex gap-[6px]">
-          <Button size="xs" color="green" className="h-7" onClick={handleEditClick}>
+          <Button size="xs" color="green" className="h-7" onClick={handleEditClick} aria-label="Изменить">
             <span className="max-md:hidden">Изменить</span> <MdEdit className="hidden w-4 h-4 max-md:block" />
           </Button>
-          <Button size="xs" color="red" className="h-7" onClick={handleDeleteClick}>
+          <Button size="xs" color="red" className="h-7" onClick={handleDeleteClick} aria-label="Удалить">
             <span className="max-md:hidden">Удалить</span> <MdDelete className="hidden w-4 h-4 max-md:block" />
           </Button>
         </div>
