@@ -9,13 +9,14 @@ import { useToast } from '@/hooks/useToast';
 import { useEffect, useState } from 'react';
 import DialogTextarea from '../DialogTextarea/DialogTextarea';
 import DialogLabel from '../DialogLabel/DialogLabel';
+import { selectEntries } from '@/store/selectors';
 
 const EditDialog = () => {
   const toast = useToast();
   const isShowDialog = useSelector((state: TRootState) => state.dialogs.isOpenEditDialog);
   const editEntryId = useSelector((state: TRootState) => state.entries.editEntryId);
   const dispatch: TAppDispatch = useDispatch();
-  const entries: IEntry[] = useSelector((state: TRootState) => state.entries.entries);
+  const entries: IEntry[] = useSelector(selectEntries);
   const entry = entries.find((entry) => entry.id === editEntryId) || null;
   const [isLoading, setIsLoading] = useState(false);
 

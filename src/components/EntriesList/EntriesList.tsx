@@ -5,13 +5,14 @@ import type { TAppDispatch, TRootState } from '@/store';
 import type { IEntry } from '@/types';
 import { loadMoreEntries } from '@/store/entrySlice';
 import clsx from 'clsx';
+import { selectEntries } from '@/store/selectors';
 
 interface IProps {
   isLoading: boolean;
 }
 
 const EntriesList = ({ isLoading }: IProps) => {
-  const entries: IEntry[] = useSelector((state: TRootState) => state.entries.entries);
+  const entries: IEntry[] = useSelector(selectEntries;
   const count = useSelector((state: TRootState) => state.entries.entriesCount);
   const dispatch: TAppDispatch = useDispatch();
 

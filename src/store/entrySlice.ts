@@ -85,7 +85,7 @@ export const editEntry = createAsyncThunk('entries/editEntry', async (entry: IEn
   return data[0];
 });
 
-interface IInitialState {
+export interface IInitialState {
   entries: IEntry[];
   entriesCount: number;
   status: 'pending' | 'fulfilled' | 'rejected' | null;
@@ -98,7 +98,7 @@ interface IInitialState {
   isInitialLoading: boolean;
 }
 
-const initialState: IInitialState = {
+export const initialState: IInitialState = {
   entries: [],
   entriesCount: 0,
   loadMoreStatus: 'idle',

@@ -26,6 +26,8 @@ function App() {
   const dispatch: TAppDispatch = useDispatch();
   const { entries, status, error, isInitialLoading } = useSelector((state: TRootState) => state.entries);
 
+  console.log(entries);
+
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
