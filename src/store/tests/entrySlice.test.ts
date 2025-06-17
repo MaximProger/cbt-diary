@@ -11,63 +11,212 @@ import entryReducer, {
 } from '../entrySlice';
 
 describe('entrySlice', () => {
-  it('should return default state when passed an empty action', () => {
-    const result = entryReducer(undefined, { type: '' });
-
-    expect(result).toEqual(initialState);
+  describe('initial state', () => {
+    it('should return initial state when passed undefined state and empty action', () => {
+      const result = entryReducer(undefined, { type: '' });
+      expect(result).toEqual(initialState);
+    });
   });
 
-  it('should set delete entry id with "setDeleteEntryId" action', () => {
-    const action = { type: setDeleteEntryId.type, payload: 1 };
-    const result = entryReducer(initialState, action);
-    expect(result.deleteEntryId).toEqual(1);
+  describe('deleteEntryId actions', () => {
+    it('should set delete entry id', () => {
+      const entryId = 42;
+      const action = setDeleteEntryId(entryId);
+      const result = entryReducer(initialState, action);
+
+      expect(result).toEqual({
+        ...initialState,
+        deleteEntryId: entryId,
+      });
+    });
+
+    it('should clear delete entry id', () => {
+      const stateWithDeleteEntryId: IInitialState = {
+        ...initialState,
+        deleteEntryId: 5,
+      };
+
+      const action = clearDeleteEntryId();
+      const result = entryReducer(stateWithDeleteEntryId, action);
+
+      expect(result).toEqual({
+        ...stateWithDeleteEntryId,
+        deleteEntryId: null,
+      });
+    });
+
+    it('should handle setting delete entry id to 0', () => {
+      const action = setDeleteEntryId(0);
+      const result = entryReducer(initialState, action);
+
+      expect(result.deleteEntryId).toBe(0);
+    });
   });
 
-  it('should clear delete entry id with "clearDeleteEntryId" action', () => {
-    const stateWithDeleteEntryId: IInitialState = {
-      ...initialState,
-      deleteEntryId: 1,
-    };
-    const action = { type: clearDeleteEntryId.type };
-    const result = entryReducer(stateWithDeleteEntryId, action);
-    expect(result.deleteEntryId).toBeNull();
+  describe('editEntryId actions', () => {
+    it('should set edit entry id', () => {
+      const entryId = 15;
+      const action = setEditEntryId(entryId);
+      const result = entryReducer(initialState, action);
+
+      expect(result).toEqual({
+        ...initialState,
+        editEntryId: entryId,
+      });
+    });
+
+    it('should clear edit entry id', () => {
+      const stateWithEditEntryId: IInitialState = {
+        ...initialState,
+        editEntryId: 10,
+      };
+
+      const action = clearEditEntryId();
+      const result = entryReducer(stateWithEditEntryId, action);
+
+      expect(result).toEqual({
+        ...stateWithEditEntryId,
+        editEntryId: null,
+      });
+    });
   });
 
-  it('should set edit entry id with "setEditEntryId" action', () => {
-    const action = { type: setEditEntryId.type, payload: 1 };
-    const result = entryReducer(initialState, action);
-    expect(result.editEntryId).toEqual(1);
+  describe('searchTerm actions', () => {
+    it('should set search term', () => {
+      const searchQuery = 'important task';
+      const action = setSearchTerm(searchQuery);
+      const result = entryReducer(initialState, action);
+
+      expect(result).toEqual({
+        ...initialState,
+        searchTerm: searchQuery,
+      });
+    });
+
+    it('should clear search term', () => {
+      const stateWithSearchTerm: IInitialState = {
+        ...initialState,
+        searchTerm: 'previous search',
+      };
+
+      const action = clearSearchTerm();
+      const result = entryReducer(stateWithSearchTerm, action);
+
+      expect(result).toEqual({
+        ...stateWithSearchTerm,
+        searchTerm: '',
+      });
+    });
+
+    it('should handle empty string as search term', () => {
+      const action = setSearchTerm('');
+      const result = entryReducer(initialState, action);
+
+      expect(result.searchTerm).toBe('');
+    });
+
+    it('should handle search term with special characters', () => {
+      const specialSearchTerm = 'test@#$%^&*()';
+      const action = setSearchTerm(specialSearchTerm);
+      const result = entryReducer(initialState, action);
+
+      expect(result.searchTerm).toBe(specialSearchTerm);
+    });
   });
 
-  it('should clear edit entry id with "clearEditEntryId" action', () => {
-    const stateWithEditEntryId: IInitialState = {
-      ...initialState,
-      deleteEntryId: 1,
-    };
-    const action = { type: clearEditEntryId.type };
-    const result = entryReducer(stateWithEditEntryId, action);
-    expect(result.editEntryId).toBeNull();
+  describe('sorting actions', () => {
+    it('should set ascending sort value', () => {
+      const sortValue = 'new';
+      const action = setAscending(sortValue);
+      const result = entryReducer(initialState, action);
+
+      expect(result).toEqual({
+        ...initialState,
+        sortValue,
+      });
+    });
+
+    it('should set descending sort value', () => {
+      const sortValue = 'old';
+      const action = setAscending(sortValue);
+      const result = entryReducer(initialState, action);
+
+      expect(result.sortValue).toBe(sortValue);
+    });
+
+    it('should handle different sort values', () => {
+      const testCases = ['new', 'old', 'alphabetical'];
+
+      testCases.forEach((sortValue) => {
+        const action = setAscending(sortValue);
+        const result = entryReducer(initialState, action);
+        expect(result.sortValue).toBe(sortValue);
+      });
+    });
   });
 
-  it('should set search term with "setSearchTerm" action', () => {
-    const action = { type: setSearchTerm.type, payload: 'text...' };
-    const result = entryReducer(initialState, action);
-    expect(result.searchTerm).toBe('text...');
+  describe('state immutability', () => {
+    it('should not mutate original state when setting delete entry id', () => {
+      const originalState = { ...initialState };
+      const action = setDeleteEntryId(1);
+
+      entryReducer(initialState, action);
+
+      expect(initialState).toEqual(originalState);
+    });
+
+    it('should return new state object reference', () => {
+      const action = setDeleteEntryId(1);
+      const result = entryReducer(initialState, action);
+
+      expect(result).not.toBe(initialState);
+    });
   });
 
-  it('should clear edit entry id with "clearSearchTerm" action', () => {
-    const stateWithSearchTerm: IInitialState = {
-      ...initialState,
-      searchTerm: 'text...',
-    };
-    const action = { type: clearSearchTerm.type };
-    const result = entryReducer(stateWithSearchTerm, action);
-    expect(result.searchTerm).toBe('');
+  describe('multiple actions sequence', () => {
+    it('should handle multiple actions in sequence', () => {
+      let state = initialState;
+
+      state = entryReducer(state, setDeleteEntryId(1));
+      expect(state.deleteEntryId).toBe(1);
+
+      state = entryReducer(state, setEditEntryId(2));
+      expect(state.editEntryId).toBe(2);
+      expect(state.deleteEntryId).toBe(1);
+
+      state = entryReducer(state, setSearchTerm('test'));
+      expect(state.searchTerm).toBe('test');
+      expect(state.editEntryId).toBe(2);
+      expect(state.deleteEntryId).toBe(1);
+    });
   });
 
-  it('should set sort value with "setAscending" action', () => {
-    const action = { type: setAscending.type, payload: 'old' };
-    const result = entryReducer(initialState, action);
-    expect(result.sortValue).toBe('old');
+  describe('edge cases', () => {
+    it('should handle unknown action type', () => {
+      const unknownAction = { type: 'UNKNOWN_ACTION', payload: 'test' };
+      const result = entryReducer(initialState, unknownAction);
+
+      expect(result).toEqual(initialState);
+    });
+
+    it('should handle negative entry ids', () => {
+      const negativeId = -1;
+      const deleteAction = setDeleteEntryId(negativeId);
+      const editAction = setEditEntryId(negativeId);
+
+      const deleteResult = entryReducer(initialState, deleteAction);
+      const editResult = entryReducer(initialState, editAction);
+
+      expect(deleteResult.deleteEntryId).toBe(negativeId);
+      expect(editResult.editEntryId).toBe(negativeId);
+    });
+
+    it('should handle very long search terms', () => {
+      const longSearchTerm = 'a'.repeat(1000);
+      const action = setSearchTerm(longSearchTerm);
+      const result = entryReducer(initialState, action);
+
+      expect(result.searchTerm).toBe(longSearchTerm);
+    });
   });
 });
