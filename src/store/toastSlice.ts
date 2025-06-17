@@ -10,14 +10,14 @@ export interface IToast {
   pauseOnHover?: boolean;
 }
 
-interface ToastState {
+export interface IToastState {
   toasts: IToast[];
   defaultDuration: number;
   defaultPosition: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'top-center';
   defaultAnimation: 'slide' | 'bounce' | 'fade';
 }
 
-const initialState: ToastState = {
+export const initialState: IToastState = {
   toasts: [],
   defaultDuration: 5000,
   defaultPosition: 'top-right',
@@ -45,41 +45,9 @@ const toastSlice = createSlice({
     clearAllToasts: (state) => {
       state.toasts = [];
     },
-    setDefaultSettings: (state, action: PayloadAction<Partial<Omit<ToastState, 'toasts'>>>) => {
-      Object.assign(state, action.payload);
-    },
-    // Добавляем быстрые методы для разных типов уведомлений
-    showSuccess: (state, action: PayloadAction<string | { message: string; duration?: number }>) => {
-      const payload = typeof action.payload === 'string' ? { message: action.payload } : action.payload;
-
-      const toast: IToast = {
-        id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
-        type: 'success',
-        duration: state.defaultDuration,
-        position: state.defaultPosition,
-        animation: state.defaultAnimation,
-        pauseOnHover: true,
-        ...payload,
-      };
-      state.toasts.push(toast);
-    },
-    showError: (state, action: PayloadAction<string | { message: string; duration?: number }>) => {
-      const payload = typeof action.payload === 'string' ? { message: action.payload } : action.payload;
-
-      const toast: IToast = {
-        id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
-        type: 'danger',
-        duration: state.defaultDuration,
-        position: state.defaultPosition,
-        animation: state.defaultAnimation,
-        pauseOnHover: true,
-        ...payload,
-      };
-      state.toasts.push(toast);
-    },
   },
 });
 
-export const { addToast, removeToast, clearAllToasts, setDefaultSettings, showSuccess, showError } = toastSlice.actions;
+export const { addToast, removeToast, clearAllToasts } = toastSlice.actions;
 
 export default toastSlice.reducer;

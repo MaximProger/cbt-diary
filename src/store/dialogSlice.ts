@@ -1,6 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = {
+export interface IInitialState {
+  isOpenAddDialog: boolean;
+  isOpenAuthDialog: boolean;
+  isOpenDeleteDialog: boolean;
+  isOpenEditDialog: boolean;
+  isOpenInfoDialog: boolean;
+}
+
+export const initialState: IInitialState = {
   isOpenAddDialog: false,
   isOpenAuthDialog: false,
   isOpenDeleteDialog: false,

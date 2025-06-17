@@ -12,7 +12,7 @@ interface IProps {
 }
 
 const EntriesList = ({ isLoading }: IProps) => {
-  const entries: IEntry[] = useSelector(selectEntries;
+  const entries: IEntry[] = useSelector(selectEntries);
   const count = useSelector((state: TRootState) => state.entries.entriesCount);
   const dispatch: TAppDispatch = useDispatch();
 

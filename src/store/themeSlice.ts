@@ -1,10 +1,10 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
-interface IInitialState {
+export interface IInitialState {
   isDarkMode: boolean;
 }
 
-const initialState: IInitialState = {
+export const initialState: IInitialState = {
   isDarkMode: false,
 };
 

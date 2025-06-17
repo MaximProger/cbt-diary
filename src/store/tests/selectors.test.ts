@@ -1,3 +1,7 @@
+import { initialState as entryState } from '../entrySlice';
+import { initialState as toastState } from '../toastSlice';
+import { initialState as dialogState } from '../dialogSlice';
+import { initialState as themeState } from '../themeSlice';
 import { selectEntries } from '../selectors';
 
 describe('Redux Selectors', () => {
@@ -14,7 +18,17 @@ describe('Redux Selectors', () => {
         search_vector: "'11111':1 '22222':2,3 '222222':4",
       },
     ];
-    const result = selectEntries({ entries });
-    expect(result).toEqual(entries.entries);
+
+    const state = {
+      dialogs: dialogState,
+      toasts: toastState,
+      theme: themeState,
+      entries: {
+        ...entryState,
+        entries,
+      },
+    };
+    const result = selectEntries(state);
+    expect(result).toEqual(entries);
   });
 });

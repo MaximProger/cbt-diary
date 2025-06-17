@@ -11,7 +11,7 @@ import entryReducer, {
 } from '../entrySlice';
 
 describe('entrySlice', () => {
-  it('should return default state when  passed an empty action', () => {
+  it('should return default state when passed an empty action', () => {
     const result = entryReducer(undefined, { type: '' });
 
     expect(result).toEqual(initialState);
