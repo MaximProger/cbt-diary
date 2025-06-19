@@ -1,5 +1,7 @@
 import { vi } from 'vitest';
+import { ENTRIES_LIMIT } from '@/constants'; // Используем реальную константу вместо мока
 
+// Мок данных для начального состояния
 const entries = [
   {
     id: 36,
@@ -13,6 +15,7 @@ const entries = [
   },
 ];
 
+// Мок ответа от Supabase
 const mockResponse = {
   data: [
     {
@@ -38,21 +41,22 @@ const mockResponse = {
   ],
 };
 
+// Мок для пустого ответа
+const emptyResponse = {
+  data: [],
+};
+
 describe('loadMoreEntries', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.resetModules();
   });
 
-  it('successful load with default parameters', async () => {
+  it('должен успешно загружать записи с параметрами по умолчанию', async () => {
     const rangeMock = vi.fn().mockResolvedValue(mockResponse);
     const orderMock = vi.fn().mockReturnValue({ range: rangeMock });
     const selectMock = vi.fn().mockReturnValue({ order: orderMock });
     const fromMock = vi.fn().mockReturnValue({ select: selectMock });
-
-    vi.doMock('../../constants', () => ({
-      ENTRIES_LIMIT: 2,
-    }));
 
     vi.doMock('../../supabaseClient', () => ({
       supabase: { from: fromMock },
@@ -74,22 +78,21 @@ describe('loadMoreEntries', () => {
     const { calls } = dispatch.mock;
     expect(calls).toHaveLength(2);
     const [start, end] = calls;
+    expect(fromMock).toHaveBeenCalledWith('catostrafization_entries');
+    expect(selectMock).toHaveBeenCalledWith('*');
     expect(start[0].type).toBe(loadMoreEntries.pending.type);
     expect(end[0].type).toBe(loadMoreEntries.fulfilled.type);
-    expect(end[0].payload).toStrictEqual(mockResponse);
-    expect(fromMock).toHaveBeenCalledWith('catostrafization_entries');
-    expect(rangeMock).toHaveBeenCalledWith(1, 2);
+    expect(end[0].payload).toStrictEqual({ data: mockResponse.data });
+    expect(orderMock).toHaveBeenCalledWith('created_at', { ascending: false });
+    expect(rangeMock).toHaveBeenCalledWith(1, 1 + ENTRIES_LIMIT - 1);
   });
-  it('successful load with search term', async () => {
+
+  it('должен успешно загружать записи с поисковым запросом', async () => {
     const orMock = vi.fn().mockResolvedValue(mockResponse);
     const rangeMock = vi.fn().mockReturnValue({ or: orMock });
     const orderMock = vi.fn().mockReturnValue({ range: rangeMock });
     const selectMock = vi.fn().mockReturnValue({ order: orderMock });
     const fromMock = vi.fn().mockReturnValue({ select: selectMock });
-
-    vi.doMock('../../constants', () => ({
-      ENTRIES_LIMIT: 2,
-    }));
 
     vi.doMock('../../supabaseClient', () => ({
       supabase: { from: fromMock },
@@ -100,7 +103,7 @@ describe('loadMoreEntries', () => {
     const getState = () => ({
       entries: {
         entries,
-        searchTerm: searchTerm,
+        searchTerm,
         sortValue: 'new',
       },
     });
@@ -112,25 +115,23 @@ describe('loadMoreEntries', () => {
     const { calls } = dispatch.mock;
     expect(calls).toHaveLength(2);
     const [start, end] = calls;
+    expect(fromMock).toHaveBeenCalledWith('catostrafization_entries');
+    expect(selectMock).toHaveBeenCalledWith('*');
     expect(start[0].type).toBe(loadMoreEntries.pending.type);
     expect(end[0].type).toBe(loadMoreEntries.fulfilled.type);
-    expect(end[0].payload).toStrictEqual(mockResponse);
-    expect(fromMock).toHaveBeenCalledWith('catostrafization_entries');
-    expect(rangeMock).toHaveBeenCalledWith(1, 2);
+    expect(end[0].payload).toStrictEqual({ data: mockResponse.data });
+    expect(rangeMock).toHaveBeenCalledWith(1, 1 + ENTRIES_LIMIT - 1);
     expect(orMock).toHaveBeenCalledWith(
       `worst_case.ilike.%${searchTerm}%,worst_consequences.ilike.%${searchTerm}%,what_can_i_do.ilike.%${searchTerm}%,how_will_i_cope.ilike.%${searchTerm}%`,
     );
     expect(orderMock).toHaveBeenCalledWith('created_at', { ascending: false });
   });
-  it('successful load with non-default sort (oldest first)', async () => {
+
+  it('должен успешно загружать записи с сортировкой по старым записям', async () => {
     const rangeMock = vi.fn().mockResolvedValue(mockResponse);
     const orderMock = vi.fn().mockReturnValue({ range: rangeMock });
     const selectMock = vi.fn().mockReturnValue({ order: orderMock });
     const fromMock = vi.fn().mockReturnValue({ select: selectMock });
-
-    vi.doMock('../../constants', () => ({
-      ENTRIES_LIMIT: 2,
-    }));
 
     vi.doMock('../../supabaseClient', () => ({
       supabase: { from: fromMock },
@@ -152,29 +153,33 @@ describe('loadMoreEntries', () => {
     const { calls } = dispatch.mock;
     expect(calls).toHaveLength(2);
     const [start, end] = calls;
+    expect(fromMock).toHaveBeenCalledWith('catostrafization_entries');
+    expect(selectMock).toHaveBeenCalledWith('*');
     expect(start[0].type).toBe(loadMoreEntries.pending.type);
     expect(end[0].type).toBe(loadMoreEntries.fulfilled.type);
-    expect(end[0].payload).toStrictEqual(mockResponse);
-    expect(fromMock).toHaveBeenCalledWith('catostrafization_entries');
-    expect(rangeMock).toHaveBeenCalledWith(1, 2);
+    expect(end[0].payload).toStrictEqual({ data: mockResponse.data });
     expect(orderMock).toHaveBeenCalledWith('created_at', { ascending: true });
+    expect(rangeMock).toHaveBeenCalledWith(1, 1 + ENTRIES_LIMIT - 1);
   });
-  it('empty response from supabase', async () => {
-    const rangeMock = vi.fn().mockResolvedValue({});
+
+  it('должен обрабатывать пустой ответ от Supabase', async () => {
+    const rangeMock = vi.fn().mockResolvedValue(emptyResponse);
     const orderMock = vi.fn().mockReturnValue({ range: rangeMock });
     const selectMock = vi.fn().mockReturnValue({ order: orderMock });
     const fromMock = vi.fn().mockReturnValue({ select: selectMock });
-
-    vi.doMock('../../constants', () => ({
-      ENTRIES_LIMIT: 2,
-    }));
 
     vi.doMock('../../supabaseClient', () => ({
       supabase: { from: fromMock },
     }));
 
     const { loadMoreEntries } = await import('../entrySlice');
-    const getState = () => ({});
+    const getState = () => ({
+      entries: {
+        entries: [],
+        searchTerm: '',
+        sortValue: 'new',
+      },
+    });
 
     const dispatch = vi.fn();
     const thunk = loadMoreEntries();
@@ -183,8 +188,49 @@ describe('loadMoreEntries', () => {
     const { calls } = dispatch.mock;
     expect(calls).toHaveLength(2);
     const [start, end] = calls;
+    expect(fromMock).toHaveBeenCalledWith('catostrafization_entries');
+    expect(selectMock).toHaveBeenCalledWith('*');
+    expect(start[0].type).toBe(loadMoreEntries.pending.type);
+    expect(end[0].type).toBe(loadMoreEntries.fulfilled.type);
+    expect(end[0].payload).toStrictEqual({ data: [] });
+    expect(orderMock).toHaveBeenCalledWith('created_at', { ascending: false });
+    expect(rangeMock).toHaveBeenCalledWith(0, 0 + ENTRIES_LIMIT - 1);
+  });
+
+  it('должен обрабатывать ошибку от Supabase', async () => {
+    const errorMessage = 'Database connection failed';
+    const error = new Error(errorMessage);
+    const rangeMock = vi.fn().mockRejectedValue(error);
+    const orderMock = vi.fn().mockReturnValue({ range: rangeMock });
+    const selectMock = vi.fn().mockReturnValue({ order: orderMock });
+    const fromMock = vi.fn().mockReturnValue({ select: selectMock });
+
+    vi.doMock('../../supabaseClient', () => ({
+      supabase: { from: fromMock },
+    }));
+
+    const { loadMoreEntries } = await import('../entrySlice');
+    const getState = () => ({
+      entries: {
+        entries,
+        searchTerm: '',
+        sortValue: 'new',
+      },
+    });
+
+    const dispatch = vi.fn();
+    const thunk = loadMoreEntries();
+    await thunk(dispatch, getState, null);
+
+    const { calls } = dispatch.mock;
+    expect(calls).toHaveLength(2);
+    const [start, end] = calls;
+    expect(fromMock).toHaveBeenCalledWith('catostrafization_entries');
+    expect(selectMock).toHaveBeenCalledWith('*');
     expect(start[0].type).toBe(loadMoreEntries.pending.type);
     expect(end[0].type).toBe(loadMoreEntries.rejected.type);
-    expect(end[0].payload).toBeUndefined();
+    expect(end[0].error.message).toContain(errorMessage);
+    expect(orderMock).toHaveBeenCalledWith('created_at', { ascending: false });
+    expect(rangeMock).toHaveBeenCalledWith(1, 1 + ENTRIES_LIMIT - 1);
   });
 });

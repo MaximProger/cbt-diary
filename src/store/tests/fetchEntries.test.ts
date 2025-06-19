@@ -1,6 +1,7 @@
 import { ENTRIES_LIMIT } from '@/constants';
 import { vi } from 'vitest';
 
+// Мок ответа от Supabase с данными
 const mockResponse = {
   data: [
     {
@@ -17,13 +18,19 @@ const mockResponse = {
   count: 1,
 };
 
+// Мок ответа для случая, когда записей нет
+const emptyResponse = {
+  data: [],
+  count: 0,
+};
+
 describe('fetchEntries', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.resetModules();
   });
 
-  it('should fetch entries successfully with default parameters', async () => {
+  it('должен успешно получать записи с параметрами по умолчанию', async () => {
     const rangeMock = vi.fn().mockResolvedValue(mockResponse);
     const orderMock = vi.fn().mockReturnValue({ range: rangeMock });
     const selectMock = vi.fn().mockReturnValue({ order: orderMock });
@@ -48,13 +55,15 @@ describe('fetchEntries', () => {
     expect(calls).toHaveLength(2);
     const [start, end] = calls;
     expect(fromMock).toHaveBeenCalledWith('catostrafization_entries');
+    expect(selectMock).toHaveBeenCalledWith('*', { count: 'exact' });
     expect(start[0].type).toBe(fetchEntries.pending.type);
     expect(end[0].type).toBe(fetchEntries.fulfilled.type);
     expect(orderMock).toHaveBeenCalledWith('created_at', { ascending: false });
     expect(rangeMock).toHaveBeenCalledWith(0, ENTRIES_LIMIT - 1);
     expect(end[0].payload).toStrictEqual(mockResponse);
   });
-  it('should fetch entries in ascending order when sortValue is not "new"', async () => {
+
+  it('должен получать записи в порядке возрастания, если sortValue не "new"', async () => {
     const rangeMock = vi.fn().mockResolvedValue(mockResponse);
     const orderMock = vi.fn().mockReturnValue({ range: rangeMock });
     const selectMock = vi.fn().mockReturnValue({ order: orderMock });
@@ -78,13 +87,16 @@ describe('fetchEntries', () => {
     const { calls } = dispatch.mock;
     expect(calls).toHaveLength(2);
     const [start, end] = calls;
+    expect(fromMock).toHaveBeenCalledWith('catostrafization_entries');
+    expect(selectMock).toHaveBeenCalledWith('*', { count: 'exact' });
     expect(start[0].type).toBe(fetchEntries.pending.type);
     expect(end[0].type).toBe(fetchEntries.fulfilled.type);
-    expect(end[0].payload).toStrictEqual(mockResponse);
     expect(orderMock).toHaveBeenCalledWith('created_at', { ascending: true });
     expect(rangeMock).toHaveBeenCalledWith(0, ENTRIES_LIMIT - 1);
+    expect(end[0].payload).toStrictEqual(mockResponse);
   });
-  it('should fetch entries with search filter applied', async () => {
+
+  it('должен получать записи с применением фильтра поиска', async () => {
     const orMock = vi.fn().mockResolvedValue(mockResponse);
     const rangeMock = vi.fn().mockReturnValue({ or: orMock });
     const orderMock = vi.fn().mockReturnValue({ range: rangeMock });
@@ -110,6 +122,8 @@ describe('fetchEntries', () => {
     const { calls } = dispatch.mock;
     expect(calls).toHaveLength(2);
     const [start, end] = calls;
+    expect(fromMock).toHaveBeenCalledWith('catostrafization_entries');
+    expect(selectMock).toHaveBeenCalledWith('*', { count: 'exact' });
     expect(start[0].type).toBe(fetchEntries.pending.type);
     expect(end[0].type).toBe(fetchEntries.fulfilled.type);
     expect(end[0].payload).toStrictEqual(mockResponse);
@@ -118,7 +132,8 @@ describe('fetchEntries', () => {
     );
     expect(orderMock).toHaveBeenCalledWith('created_at', { ascending: false });
   });
-  it('should handle and return an error from supabase', async () => {
+
+  it('должен обрабатывать и возвращать ошибку от Supabase', async () => {
     const errorMessage = 'Database connection failed';
     const error = new Error(errorMessage);
     const rangeMock = vi.fn().mockRejectedValue(error);
@@ -131,7 +146,6 @@ describe('fetchEntries', () => {
     }));
 
     const { fetchEntries } = await import('../entrySlice');
-
     const getState = () => ({
       entries: {
         searchTerm: '',
@@ -145,11 +159,14 @@ describe('fetchEntries', () => {
     const { calls } = dispatch.mock;
     expect(calls).toHaveLength(2);
     const [start, end] = calls;
+    expect(fromMock).toHaveBeenCalledWith('catostrafization_entries');
+    expect(selectMock).toHaveBeenCalledWith('*', { count: 'exact' });
     expect(start[0].type).toBe(fetchEntries.pending.type);
     expect(end[0].type).toBe(fetchEntries.rejected.type);
     expect(end[0].error.message).toContain(errorMessage);
   });
-  it('should respect entry limit (ENTRIES_LIMIT)', async () => {
+
+  it('должен соблюдать лимит записей (ENTRIES_LIMIT)', async () => {
     const rangeMock = vi.fn().mockResolvedValue(mockResponse);
     const orderMock = vi.fn().mockReturnValue({ range: rangeMock });
     const selectMock = vi.fn().mockReturnValue({ order: orderMock });
@@ -158,8 +175,8 @@ describe('fetchEntries', () => {
     vi.doMock('../../supabaseClient', () => ({
       supabase: { from: fromMock },
     }));
-    const { fetchEntries } = await import('../entrySlice');
 
+    const { fetchEntries } = await import('../entrySlice');
     const getState = () => ({
       entries: {
         searchTerm: '',
@@ -173,9 +190,44 @@ describe('fetchEntries', () => {
     const { calls } = dispatch.mock;
     expect(calls).toHaveLength(2);
     const [start, end] = calls;
+    expect(fromMock).toHaveBeenCalledWith('catostrafization_entries');
+    expect(selectMock).toHaveBeenCalledWith('*', { count: 'exact' });
     expect(start[0].type).toBe(fetchEntries.pending.type);
     expect(end[0].type).toBe(fetchEntries.fulfilled.type);
     expect(end[0].payload).toStrictEqual(mockResponse);
     expect(rangeMock).toHaveBeenCalledWith(0, ENTRIES_LIMIT - 1);
+  });
+
+  it('должен корректно обрабатывать случай, когда записи не найдены', async () => {
+    const rangeMock = vi.fn().mockResolvedValue(emptyResponse);
+    const orderMock = vi.fn().mockReturnValue({ range: rangeMock });
+    const selectMock = vi.fn().mockReturnValue({ order: orderMock });
+    const fromMock = vi.fn().mockReturnValue({ select: selectMock });
+
+    vi.doMock('../../supabaseClient', () => ({
+      supabase: { from: fromMock },
+    }));
+
+    const { fetchEntries } = await import('../entrySlice');
+    const getState = () => ({
+      entries: {
+        searchTerm: '',
+        sortValue: 'new',
+      },
+    });
+    const dispatch = vi.fn();
+    const thunk = fetchEntries();
+    await thunk(dispatch, getState, null);
+
+    const { calls } = dispatch.mock;
+    expect(calls).toHaveLength(2);
+    const [start, end] = calls;
+    expect(fromMock).toHaveBeenCalledWith('catostrafization_entries');
+    expect(selectMock).toHaveBeenCalledWith('*', { count: 'exact' });
+    expect(start[0].type).toBe(fetchEntries.pending.type);
+    expect(end[0].type).toBe(fetchEntries.fulfilled.type);
+    expect(end[0].payload).toStrictEqual(emptyResponse);
+    expect(end[0].payload.data).toEqual([]);
+    expect(end[0].payload.count).toBe(0);
   });
 });
