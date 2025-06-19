@@ -3,13 +3,12 @@ import { useForm, type SubmitHandler } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { closeDialog } from '../../store/dialogSlice';
 import type { IEntry, IFormData } from '../../types';
-import { editEntry } from '../../store/entrySlice';
+import { editEntry, selectEntries } from '../../store/entrySlice';
 import type { TAppDispatch, TRootState } from '../../store';
 import { useToast } from '@/hooks/useToast';
 import { useEffect, useState } from 'react';
 import DialogTextarea from '../DialogTextarea/DialogTextarea';
 import DialogLabel from '../DialogLabel/DialogLabel';
-import { selectEntries } from '@/store/selectors';
 
 const EditDialog = () => {
   const toast = useToast();

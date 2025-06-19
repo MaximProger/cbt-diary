@@ -3,9 +3,8 @@ import EntryItem from './EntryItem/EntryItem';
 import { useDispatch, useSelector } from 'react-redux';
 import type { TAppDispatch, TRootState } from '@/store';
 import type { IEntry } from '@/types';
-import { loadMoreEntries } from '@/store/entrySlice';
+import { loadMoreEntries, selectEntries } from '@/store/entrySlice';
 import clsx from 'clsx';
-import { selectEntries } from '@/store/selectors';
 
 interface IProps {
   isLoading: boolean;
