@@ -36,11 +36,11 @@ describe('fetchEntries', () => {
     const selectMock = vi.fn().mockReturnValue({ order: orderMock });
     const fromMock = vi.fn().mockReturnValue({ select: selectMock });
 
-    vi.doMock('../../supabaseClient', () => ({
+    vi.doMock('@/supabaseClient', () => ({
       supabase: { from: fromMock },
     }));
 
-    const { fetchEntries } = await import('../entrySlice');
+    const { fetchEntries } = await import('../../../entrySlice');
     const getState = () => ({
       entries: {
         searchTerm: '',
@@ -69,11 +69,11 @@ describe('fetchEntries', () => {
     const selectMock = vi.fn().mockReturnValue({ order: orderMock });
     const fromMock = vi.fn().mockReturnValue({ select: selectMock });
 
-    vi.doMock('../../supabaseClient', () => ({
+    vi.doMock('@/supabaseClient', () => ({
       supabase: { from: fromMock },
     }));
 
-    const { fetchEntries } = await import('../entrySlice');
+    const { fetchEntries } = await import('../../../entrySlice');
     const getState = () => ({
       entries: {
         searchTerm: '',
@@ -103,11 +103,11 @@ describe('fetchEntries', () => {
     const selectMock = vi.fn().mockReturnValue({ order: orderMock });
     const fromMock = vi.fn().mockReturnValue({ select: selectMock });
 
-    vi.doMock('../../supabaseClient', () => ({
+    vi.doMock('@/supabaseClient', () => ({
       supabase: { from: fromMock },
     }));
 
-    const { fetchEntries } = await import('../entrySlice');
+    const { fetchEntries } = await import('../../../entrySlice');
     const searchTerm = '1111';
     const getState = () => ({
       entries: {
@@ -141,11 +141,11 @@ describe('fetchEntries', () => {
     const selectMock = vi.fn().mockReturnValue({ order: orderMock });
     const fromMock = vi.fn().mockReturnValue({ select: selectMock });
 
-    vi.doMock('../../supabaseClient', () => ({
+    vi.doMock('@/supabaseClient', () => ({
       supabase: { from: fromMock },
     }));
 
-    const { fetchEntries } = await import('../entrySlice');
+    const { fetchEntries } = await import('../../../entrySlice');
     const getState = () => ({
       entries: {
         searchTerm: '',
@@ -172,11 +172,11 @@ describe('fetchEntries', () => {
     const selectMock = vi.fn().mockReturnValue({ order: orderMock });
     const fromMock = vi.fn().mockReturnValue({ select: selectMock });
 
-    vi.doMock('../../supabaseClient', () => ({
+    vi.doMock('@/supabaseClient', () => ({
       supabase: { from: fromMock },
     }));
 
-    const { fetchEntries } = await import('../entrySlice');
+    const { fetchEntries } = await import('../../../entrySlice');
     const getState = () => ({
       entries: {
         searchTerm: '',
@@ -204,11 +204,11 @@ describe('fetchEntries', () => {
     const selectMock = vi.fn().mockReturnValue({ order: orderMock });
     const fromMock = vi.fn().mockReturnValue({ select: selectMock });
 
-    vi.doMock('../../supabaseClient', () => ({
+    vi.doMock('@/supabaseClient', () => ({
       supabase: { from: fromMock },
     }));
 
-    const { fetchEntries } = await import('../entrySlice');
+    const { fetchEntries } = await import('../../../entrySlice');
     const getState = () => ({
       entries: {
         searchTerm: '',

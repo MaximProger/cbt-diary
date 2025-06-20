@@ -2,7 +2,7 @@ import { Button } from 'flowbite-react';
 import { openDialog } from '../../store/dialogSlice';
 import { useDispatch } from 'react-redux';
 import type { Session } from '@supabase/supabase-js';
-import { supabase } from '../../supabaseClient';
+import { supabase } from '@/supabaseClient';
 import { MdLightMode, MdDarkMode, MdLogout, MdLogin, MdInfo } from 'react-icons/md';
 import { useTheme } from '@/hooks/useTheme';
 

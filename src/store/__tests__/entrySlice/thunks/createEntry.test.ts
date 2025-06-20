@@ -38,11 +38,11 @@ describe('createEntry', () => {
     const insertMock = vi.fn().mockReturnValue({ select: selectMock });
     const fromMock = vi.fn().mockReturnValue({ insert: insertMock });
 
-    vi.doMock('../../supabaseClient', () => ({
+    vi.doMock('@/supabaseClient', () => ({
       supabase: { from: fromMock },
     }));
 
-    const { createEntry } = await import('../entrySlice');
+    const { createEntry } = await import('../../../entrySlice');
 
     const dispatch = vi.fn();
     const thunk = createEntry(newEntry);
@@ -66,11 +66,11 @@ describe('createEntry', () => {
     const insertMock = vi.fn().mockReturnValue({ select: selectMock });
     const fromMock = vi.fn().mockReturnValue({ insert: insertMock });
 
-    vi.doMock('../../supabaseClient', () => ({
+    vi.doMock('@/supabaseClient', () => ({
       supabase: { from: fromMock },
     }));
 
-    const { createEntry } = await import('../entrySlice');
+    const { createEntry } = await import('../../../entrySlice');
 
     const dispatch = vi.fn();
     const thunk = createEntry(newEntry);

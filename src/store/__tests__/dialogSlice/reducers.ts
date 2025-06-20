@@ -1,4 +1,4 @@
-import dialogReducer, { openDialog, closeDialog, initialState, type IInitialState } from '../dialogSlice';
+import dialogReducer, { openDialog, closeDialog, initialState, type IInitialState } from '../../dialogSlice';
 
 describe('dialogSlice', () => {
   describe('reducer', () => {

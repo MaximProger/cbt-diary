@@ -35,11 +35,11 @@ describe('editEntry', () => {
     const updateMock = vi.fn().mockReturnValue({ eq: eqMock });
     const fromMock = vi.fn().mockReturnValue({ update: updateMock });
 
-    vi.doMock('../../supabaseClient', () => ({
+    vi.doMock('@/supabaseClient', () => ({
       supabase: { from: fromMock },
     }));
 
-    const { editEntry } = await import('../entrySlice');
+    const { editEntry } = await import('../../../entrySlice');
 
     const dispatch = vi.fn();
     const thunk = editEntry(entryToEdit);
@@ -63,11 +63,11 @@ describe('editEntry', () => {
     const updateMock = vi.fn().mockReturnValue({ eq: eqMock });
     const fromMock = vi.fn().mockReturnValue({ update: updateMock });
 
-    vi.doMock('../../supabaseClient', () => ({
+    vi.doMock('@/supabaseClient', () => ({
       supabase: { from: fromMock },
     }));
 
-    const { editEntry } = await import('../entrySlice');
+    const { editEntry } = await import('../../../entrySlice');
 
     const dispatch = vi.fn();
     const thunk = editEntry(entryToEdit);

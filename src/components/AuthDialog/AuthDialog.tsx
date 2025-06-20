@@ -5,7 +5,7 @@ import { closeDialog } from '../../store/dialogSlice';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import type { IAuthFormData } from '../../types';
 import { useState } from 'react';
-import { supabase } from '../../supabaseClient';
+import { supabase } from '@/supabaseClient';
 import { useToast } from '@/hooks/useToast';
 import DialogLabel from '../DialogLabel/DialogLabel';
 

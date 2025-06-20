@@ -8,7 +8,7 @@ import entryReducer, {
   setAscending,
   type IInitialState,
   initialState,
-} from '../entrySlice';
+} from '../../entrySlice';
 
 describe('entrySlice', () => {
   describe('initial state', () => {

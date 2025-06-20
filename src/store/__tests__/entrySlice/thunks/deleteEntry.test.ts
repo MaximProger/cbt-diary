@@ -21,11 +21,11 @@ describe('deleteEntry', () => {
     const deleteMock = vi.fn().mockReturnValue({ match: matchMock });
     const fromMock = vi.fn().mockReturnValue({ delete: deleteMock });
 
-    vi.doMock('../../supabaseClient', () => ({
+    vi.doMock('@/supabaseClient', () => ({
       supabase: { from: fromMock },
     }));
 
-    const { deleteEntry } = await import('../entrySlice');
+    const { deleteEntry } = await import('../../../entrySlice');
     const entryId = 39;
 
     const dispatch = vi.fn();
@@ -48,11 +48,11 @@ describe('deleteEntry', () => {
     const deleteMock = vi.fn().mockReturnValue({ match: matchMock });
     const fromMock = vi.fn().mockReturnValue({ delete: deleteMock });
 
-    vi.doMock('../../supabaseClient', () => ({
+    vi.doMock('@/supabaseClient', () => ({
       supabase: { from: fromMock },
     }));
 
-    const { deleteEntry } = await import('../entrySlice');
+    const { deleteEntry } = await import('../../../entrySlice');
     const entryId = 39;
 
     const dispatch = vi.fn();

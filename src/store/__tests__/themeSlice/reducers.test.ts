@@ -1,4 +1,4 @@
-import themeReducer, { toggleTheme, setTheme, initialState } from '../themeSlice';
+import themeReducer, { toggleTheme, setTheme, initialState } from '../../themeSlice';
 
 describe('themeSlice', () => {
   describe('initial state', () => {

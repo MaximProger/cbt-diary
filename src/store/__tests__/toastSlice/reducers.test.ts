@@ -1,4 +1,4 @@
-import toastReducer, { addToast, removeToast, clearAllToasts, initialState, type IToast } from '../toastSlice';
+import toastReducer, { addToast, removeToast, clearAllToasts, initialState, type IToast } from '../../toastSlice';
 
 describe('toastSlice', () => {
   const createToast = (overrides?: Partial<IToast>): IToast => ({
