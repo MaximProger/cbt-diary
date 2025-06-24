@@ -3,12 +3,12 @@ import type { ReactNode } from 'react';
 
 interface IProps {
   children: ReactNode;
-  id?: string;
+  htmlFor?: string;
 }
 
-const DialogLabel = ({ children, id }: IProps) => {
+const DialogLabel = ({ children, htmlFor }: IProps) => {
   return (
-    <Label className="mb-2 block text-(--text-quaternary) font-semibold" htmlFor={id}>
+    <Label className="mb-2 block text-(--text-quaternary) font-semibold" htmlFor={htmlFor}>
       {children}
     </Label>
   );

@@ -1,0 +1,43 @@
+export const user = {
+  id: 'user-id-123',
+  aud: 'authenticated',
+  role: 'authenticated',
+  email: 'test@example.com',
+  email_confirmed_at: '2025-01-01T00:00:00.000Z',
+  phone: '',
+  confirmation_sent_at: '2025-01-01T00:00:00.000Z',
+  confirmed_at: '2025-01-01T00:00:00.000Z',
+  recovery_sent_at: '2025-01-01T00:00:00.000Z',
+  last_sign_in_at: '2025-01-01T00:00:00.000Z',
+  app_metadata: {
+    provider: 'email',
+    providers: ['email'],
+  },
+  user_metadata: {
+    email: 'test@example.com',
+    email_verified: true,
+    phone_verified: false,
+    sub: 'user-id-123',
+  },
+  identities: [
+    {
+      identity_id: 'identity-id-123',
+      id: 'user-id-123',
+      user_id: 'user-id-123',
+      identity_data: {
+        email: 'test@example.com',
+        email_verified: true,
+        phone_verified: false,
+        sub: 'user-id-123',
+      },
+      provider: 'email',
+      last_sign_in_at: '2025-01-01T00:00:00.000Z',
+      created_at: '2025-01-01T00:00:00.000Z',
+      updated_at: '2025-01-01T00:00:00.000Z',
+      email: 'test@example.com',
+    },
+  ],
+  created_at: '2025-01-01T00:00:00.000Z',
+  updated_at: '2025-01-01T00:00:00.000Z',
+  is_anonymous: false,
+};

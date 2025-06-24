@@ -1,9 +1,9 @@
 import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setTheme } from '../store/themeSlice';
+import { setTheme } from '@/store/themeSlice';
 import type { TRootState } from '@/store';
 
-export const useThemeInitializer = () => {
+const useThemeInitializer = () => {
   const isDarkMode = useSelector((state: TRootState) => state.theme.isDarkMode);
   const dispatch = useDispatch();
   const isInitialized = useRef(false);
@@ -42,3 +42,5 @@ export const useThemeInitializer = () => {
     }
   }, [isDarkMode]);
 };
+
+export default useThemeInitializer;

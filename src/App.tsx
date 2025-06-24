@@ -18,7 +18,7 @@ import ToastContainer from './components/ToastContainer/ToastContainer';
 import EditDialog from './components/EditDialog/EditDialog';
 import EntriesList from './components/EntriesList/EntriesList';
 import NoEntriesAlert from './components/NoEntriesAlert/NoEntriesAlert';
-import { useThemeInitializer } from './hooks/useThemeInitializer';
+import useThemeInitializer from '@/hooks/useThemeInitializer/useThemeInitializer';
 import InfoDialog from './components/InfoDialog/InfoDialog';
 
 function App() {

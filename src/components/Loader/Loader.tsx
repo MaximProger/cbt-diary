@@ -1,17 +1,13 @@
 import { Spinner } from 'flowbite-react';
-
 interface IProps {
   className?: string;
   wrapperClassName?: string;
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 }
-
-const Loader = ({ className, wrapperClassName, size }: IProps) => {
+const Loader = ({ className, wrapperClassName }: IProps) => {
   return (
-    <div className={wrapperClassName}>
-      <Spinner className={className} aria-label="Идёт загрузка..." size={size} />
+    <div className={wrapperClassName} data-testid="loader_wrapper">
+      <Spinner className={className} aria-label="Идёт загрузка..." data-testid="loader" />
     </div>
   );
 };
-
 export default Loader;

@@ -11,6 +11,7 @@ const DialogTextarea = ({ registerProps, id }: IProps) => {
     <Textarea
       className="bg-(--bg-quaternary) border-[1px] border-solid border-(--border-primary) text-(--text-tertiary) focus:border-(--brand-primary) focus:ring-(--brand-primary) resize-none"
       id={id}
+      data-testid={id}
       rows={5}
       {...registerProps}
     />

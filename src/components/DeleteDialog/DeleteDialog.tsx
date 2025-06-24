@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import type { TAppDispatch, TRootState } from '../../store';
 import { closeDialog } from '../../store/dialogSlice';
 import { clearDeleteEntryId, deleteEntry } from '../../store/entrySlice';
-import { useToast } from '@/hooks/useToast';
+import useToast from '@/hooks/useToast/useToast';
 
 const DeleteDialog = () => {
   const toast = useToast();

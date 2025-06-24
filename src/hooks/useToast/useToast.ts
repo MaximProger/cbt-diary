@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux';
-import { addToast } from '../store/toastSlice';
+import { addToast } from '@/store/toastSlice';
 
-export const useToast = () => {
+const useToast = () => {
   const dispatch = useDispatch();
 
   const showToast = (message: string, type: 'success' | 'info' | 'warning' | 'danger', duration: number = 5000) => {
@@ -22,3 +22,5 @@ export const useToast = () => {
     danger,
   };
 };
+
+export default useToast;

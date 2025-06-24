@@ -6,7 +6,7 @@ import type { IFormData } from '../../types';
 import { createEntry } from '../../store/entrySlice';
 import type { TAppDispatch, TRootState } from '../../store';
 import type { User } from '@supabase/supabase-js';
-import { useToast } from '@/hooks/useToast';
+import useToast from '@/hooks/useToast/useToast';
 import { useState } from 'react';
 import DialogLabel from '../DialogLabel/DialogLabel';
 import DialogTextarea from '../DialogTextarea/DialogTextarea';
@@ -27,6 +27,7 @@ const AddDialog = ({ user }: IProps) => {
     formState: { isValid },
     reset,
   } = useForm<IFormData>();
+
   const onSubmit: SubmitHandler<IFormData> = async (formData) => {
     setIsLoading(true);
     const entry = {
@@ -61,28 +62,30 @@ const AddDialog = ({ user }: IProps) => {
       <ModalBody>
         <form className="space-y-[16px]" onSubmit={handleSubmit(onSubmit)}>
           <div>
-            <DialogLabel id="worstCase">Что самое худшее может случиться в этой ситуации</DialogLabel>
+            <DialogLabel htmlFor="worstCase">Что самое худшее может случиться в этой ситуации</DialogLabel>
             <DialogTextarea id="worstCase" registerProps={register('worstCase', { required: true })} />
           </div>
           <div>
-            <DialogLabel id="worstConsequences">Какие самые плохие последствия могут быть у этой ситуации</DialogLabel>
+            <DialogLabel htmlFor="worstConsequences">
+              Какие самые плохие последствия могут быть у этой ситуации
+            </DialogLabel>
             <DialogTextarea id="worstConsequences" registerProps={register('worstConsequences', { required: true })} />
           </div>
           <div>
-            <DialogLabel id="whatCanIDo">Что я смогу сделать в этой ситуации</DialogLabel>
+            <DialogLabel htmlFor="whatCanIDo">Что я смогу сделать в этой ситуации</DialogLabel>
             <DialogTextarea id="whatCanIDo" registerProps={register('whatCanIDo', { required: true })} />
           </div>
           <div>
-            <DialogLabel id="howWillICope">Как я справлюсь</DialogLabel>
+            <DialogLabel htmlFor="howWillICope">Как я справлюсь</DialogLabel>
             <DialogTextarea id="howWillICope" registerProps={register('howWillICope', { required: true })} />
           </div>
         </form>
       </ModalBody>
       <ModalFooter>
-        <Button size="md" onClick={handleSubmit(onSubmit)} disabled={!isValid || isLoading}>
+        <Button data-testid="submit" size="md" onClick={handleSubmit(onSubmit)} disabled={!isValid || isLoading}>
           {isLoading ? 'Создание...' : 'Создать'}
         </Button>
-        <Button size="md" color="gray" onClick={handleDialogClose}>
+        <Button size="md" color="gray" onClick={handleDialogClose} data-testid="close-btn">
           Отмена
         </Button>
       </ModalFooter>

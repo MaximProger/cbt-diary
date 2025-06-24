@@ -5,7 +5,7 @@ import { closeDialog } from '../../store/dialogSlice';
 import type { IEntry, IFormData } from '../../types';
 import { editEntry, selectEntries } from '../../store/entrySlice';
 import type { TAppDispatch, TRootState } from '../../store';
-import { useToast } from '@/hooks/useToast';
+import useToast from '@/hooks/useToast/useToast';
 import { useEffect, useState } from 'react';
 import DialogTextarea from '../DialogTextarea/DialogTextarea';
 import DialogLabel from '../DialogLabel/DialogLabel';
@@ -77,19 +77,21 @@ const EditDialog = () => {
       <ModalBody>
         <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
           <div>
-            <DialogLabel id="worstCase">Что самое худшее может случиться в этой ситуации</DialogLabel>
+            <DialogLabel htmlFor="worstCase">Что самое худшее может случиться в этой ситуации</DialogLabel>
             <DialogTextarea id="worstCase" registerProps={register('worstCase', { required: true })} />
           </div>
           <div>
-            <DialogLabel id="worstConsequences">Какие самые плохие последствия могут быть у этой ситуации</DialogLabel>
+            <DialogLabel htmlFor="worstConsequences">
+              Какие самые плохие последствия могут быть у этой ситуации
+            </DialogLabel>
             <DialogTextarea id="worstConsequences" registerProps={register('worstConsequences', { required: true })} />
           </div>
           <div>
-            <DialogLabel id="whatCanIDo">Что я смогу сделать в этой ситуации</DialogLabel>
+            <DialogLabel htmlFor="whatCanIDo">Что я смогу сделать в этой ситуации</DialogLabel>
             <DialogTextarea id="whatCanIDo" registerProps={register('whatCanIDo', { required: true })} />
           </div>
           <div>
-            <DialogLabel id="howWillICope">Как я справлюсь</DialogLabel>
+            <DialogLabel htmlFor="howWillICope">Как я справлюсь</DialogLabel>
             <DialogTextarea id="howWillICope" registerProps={register('howWillICope', { required: true })} />
           </div>
         </form>
