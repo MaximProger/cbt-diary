@@ -19,7 +19,7 @@ const AuthDialog = () => {
     reset,
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors },
   } = useForm<IAuthFormData>();
 
   const onClose = () => {
@@ -52,7 +52,7 @@ const AuthDialog = () => {
     <Modal dismissible show={isShowDialog} size="md" onClose={onClose}>
       <ModalHeader>Добро пожаловать!</ModalHeader>
       <ModalBody>
-        <form onSubmit={handleSubmit(handleLogin)}>
+        <form onSubmit={handleSubmit(handleLogin)} data-testid="form">
           <div>
             <DialogLabel htmlFor="email">Адрес электронной почты</DialogLabel>
             <TextInput
@@ -76,8 +76,9 @@ const AuthDialog = () => {
           size="md"
           className="cursor-pointer"
           type="submit"
-          disabled={!isValid || isLoading}
+          disabled={isLoading}
           onClick={handleSubmit(handleLogin)}
+          data-testid="submit"
         >
           {isLoading ? 'Отправка...' : 'Войти'}
         </Button>
