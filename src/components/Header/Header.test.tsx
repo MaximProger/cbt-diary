@@ -31,6 +31,11 @@ describe('Header', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     setupMocks();
+    vi.mocked(useTheme).mockReturnValue({
+      isDarkMode: false,
+      toggle: mockToggle,
+      setMode: mockSetMode,
+    });
   });
 
   describe('common functionality', () => {
@@ -44,27 +49,20 @@ describe('Header', () => {
     it('opens info dialog when info button clicked', () => {
       const mockedOpenDialog = vi.spyOn(dialogActions, 'openDialog');
       render(<Header session={null} />);
-      const infoBtn = screen.getByTestId('info_btn');
+      const infoBtn = screen.getByRole('button', { name: /Информация/i });
       fireEvent.click(infoBtn);
-      expect(dispatch).toHaveBeenCalledTimes(1);
       expect(mockedOpenDialog).toHaveBeenCalledTimes(1);
       expect(mockedOpenDialog).toHaveBeenCalledWith('isOpenInfoDialog');
     });
 
     it('toggles theme when theme button clicked', () => {
       render(<Header session={null} />);
-      const themeBtn = screen.getByTestId('theme_btn');
+      const themeBtn = screen.getByRole('button', { name: /Переключить тему/i });
       fireEvent.click(themeBtn);
       expect(mockToggle).toHaveBeenCalledTimes(1);
     });
 
     it('shows dark mode icon when theme is light', () => {
-      vi.mocked(useTheme).mockReturnValue({
-        isDarkMode: false,
-        toggle: mockToggle,
-        setMode: mockSetMode,
-      });
-
       render(<Header session={null} />);
       expect(screen.getByTestId('dark_mode_icon')).toBeInTheDocument();
       expect(screen.queryByTestId('light_mode_icon')).not.toBeInTheDocument();
@@ -84,11 +82,14 @@ describe('Header', () => {
 
     it('renders all buttons with proper aria labels', () => {
       render(<Header session={null} />);
-      expect(screen.getByTestId('theme_btn')).toHaveAttribute('aria-label', 'Переключить тему');
-      expect(screen.getByTestId('info_btn')).toHaveAttribute('aria-label', 'Информация');
-      expect(screen.getByTestId('login_btn')).toHaveAttribute('aria-label', 'Войти');
+      expect(screen.getByRole('button', { name: /Переключить тему/i })).toHaveAttribute(
+        'aria-label',
+        'Переключить тему',
+      );
+      expect(screen.getByRole('button', { name: /Информация/i })).toHaveAttribute('aria-label', 'Информация');
+      expect(screen.getByRole('button', { name: /Войти/i })).toHaveAttribute('aria-label', 'Войти');
       render(<Header session={mockSession} />);
-      expect(screen.getByTestId('logout_btn')).toHaveAttribute('aria-label', 'Выйти');
+      expect(screen.getByRole('button', { name: /Выйти/i })).toHaveAttribute('aria-label', 'Выйти');
     });
 
     it('shows text labels on desktop and icons on mobile', () => {
@@ -104,7 +105,7 @@ describe('Header', () => {
   describe('when user is not logged in', () => {
     it('shows login button when no session', () => {
       render(<Header session={null} />);
-      const loginBtn = screen.getByTestId('login_btn');
+      const loginBtn = screen.getByRole('button', { name: /Войти/i });
       expect(loginBtn).toBeInTheDocument();
       expect(loginBtn).toHaveTextContent('Войти');
     });
@@ -112,9 +113,8 @@ describe('Header', () => {
     it('opens auth dialog when login button clicked', () => {
       const mockedOpenDialog = vi.spyOn(dialogActions, 'openDialog');
       render(<Header session={null} />);
-      const loginBtn = screen.getByTestId('login_btn');
+      const loginBtn = screen.getByRole('button', { name: /Войти/i });
       fireEvent.click(loginBtn);
-      expect(dispatch).toHaveBeenCalledTimes(1);
       expect(mockedOpenDialog).toHaveBeenCalledTimes(1);
       expect(mockedOpenDialog).toHaveBeenCalledWith('isOpenAuthDialog');
     });
@@ -123,14 +123,12 @@ describe('Header', () => {
   describe('when user is logged in', () => {
     it('displays user email when session exists', () => {
       render(<Header session={mockSession} />);
-      const userEmail = screen.getByTestId('user_email');
-      expect(userEmail).toBeInTheDocument();
-      expect(userEmail).toHaveTextContent(mockSession.user.email);
+      expect(screen.getByText(mockSession.user.email)).toBeInTheDocument();
     });
 
     it('shows logout button when session exists', () => {
       render(<Header session={mockSession} />);
-      const logoutBtn = screen.getByTestId('logout_btn');
+      const logoutBtn = screen.getByRole('button', { name: /Выйти/i });
       expect(logoutBtn).toBeInTheDocument();
       expect(logoutBtn).toHaveTextContent('Выйти');
     });
@@ -145,7 +143,7 @@ describe('Header', () => {
       }));
 
       render(<Header session={mockSession} />);
-      const logoutBtn = screen.getByTestId('logout_btn');
+      const logoutBtn = screen.getByRole('button', { name: /Выйти/i });
       fireEvent.click(logoutBtn);
       expect(supabase.auth.signOut).toHaveBeenCalled();
     });

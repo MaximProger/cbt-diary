@@ -30,22 +30,19 @@ const Header = ({ session }: IProps) => {
       </a>
       <div className="flex flex-wrap gap-[12px]">
         {session && (
-          <div
-            className="p-[8px_12px] bg-(--bg-tertiary) rounded-[8px] text-sm text-(--text-secondary) truncate max-w-[250px]"
-            data-testid="user_email"
-          >
+          <div className="p-[8px_12px] bg-(--bg-tertiary) rounded-[8px] text-sm text-(--text-secondary) truncate max-w-[250px]">
             {session.user.email}
           </div>
         )}
         {session ? (
-          <Button color="red" size="sm" onClick={logout} aria-label="Выйти" data-testid="logout_btn">
+          <Button color="red" size="sm" onClick={logout} aria-label="Выйти">
             <span className="max-md:hidden" data-testid="logout_text">
               Выйти
             </span>{' '}
             <MdLogout className="hidden w-4 h-4 max-md:block" data-testid="logout_icon" />
           </Button>
         ) : (
-          <Button size="sm" onClick={openAuthDialogHandler} aria-label="Войти" data-testid="login_btn">
+          <Button size="sm" onClick={openAuthDialogHandler} aria-label="Войти">
             <span className="max-md:hidden" data-testid="login_text">
               Войти
             </span>{' '}
@@ -53,14 +50,14 @@ const Header = ({ session }: IProps) => {
           </Button>
         )}
 
-        <Button color="gray" size="sm" onClick={toggle} aria-label="Переключить тему" data-testid="theme_btn">
+        <Button color="gray" size="sm" onClick={toggle} aria-label="Переключить тему">
           {isDarkMode ? (
             <MdLightMode className="w-4 h-4" data-testid="light_mode_icon" />
           ) : (
             <MdDarkMode className="w-4 h-4" data-testid="dark_mode_icon" />
           )}
         </Button>
-        <Button size="sm" onClick={openInfoDialogHandler} aria-label="Информация" data-testid="info_btn">
+        <Button size="sm" onClick={openInfoDialogHandler} aria-label="Информация">
           <MdInfo className="w-4 h-4" />
         </Button>
       </div>
