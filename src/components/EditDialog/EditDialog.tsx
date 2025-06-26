@@ -75,7 +75,7 @@ const EditDialog = () => {
     <Modal dismissible size="3xl" show={isShowDialog} onClose={handleDialogClose}>
       <ModalHeader>Редактирование записи</ModalHeader>
       <ModalBody>
-        <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+        <form className="space-y-6" onSubmit={handleSubmit(onSubmit)} data-testid="form">
           <div>
             <DialogLabel htmlFor="worstCase">Что самое худшее может случиться в этой ситуации</DialogLabel>
             <DialogTextarea id="worstCase" registerProps={register('worstCase', { required: true })} />
