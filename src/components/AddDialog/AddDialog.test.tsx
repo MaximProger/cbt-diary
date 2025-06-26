@@ -4,19 +4,11 @@ import { vi } from 'vitest';
 import * as reduxHooks from 'react-redux';
 import * as dialogActions from '@/store/dialogSlice';
 import * as entryActions from '@/store/entrySlice';
-import { user } from '@/__mocks__/mockUser';
+import { mockUser } from '@/__mocks__/';
+import { mockEntry, TEST_FIELD_VALUE } from '@/__mocks__';
 
-const TEST_FIELD_VALUE = 'Test';
 const SUCCESS_TOAST_MESSAGE = 'Запись успешно добавлена!';
 const ERROR_TOAST_MESSAGE = 'Произошла ошибка при добавлении записи!';
-const entry = {
-  created_at: expect.any(String),
-  created_by: user.id,
-  worst_case: TEST_FIELD_VALUE,
-  worst_consequences: TEST_FIELD_VALUE,
-  what_can_i_do: TEST_FIELD_VALUE,
-  how_will_i_cope: TEST_FIELD_VALUE,
-};
 
 const fillForm = async (value: string = TEST_FIELD_VALUE) => {
   fireEvent.change(screen.getByTestId('worstCase'), {
@@ -77,19 +69,19 @@ describe('AddDialog', () => {
 
   describe('Modal behavior', () => {
     it('renders modal when isShowDialog is true', () => {
-      render(<AddDialog user={user} />);
+      render(<AddDialog user={mockUser} />);
       expect(screen.getByRole('dialog')).toBeInTheDocument();
     });
 
     it('does not render modal when isShowDialog is false', () => {
       setupMocks(false);
-      render(<AddDialog user={user} />);
+      render(<AddDialog user={mockUser} />);
       expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     });
 
     it('calls closeDialog when modal is closed', () => {
       const mockedCloseDialog = vi.spyOn(dialogActions, 'closeDialog');
-      render(<AddDialog user={user} />);
+      render(<AddDialog user={mockUser} />);
 
       fireEvent.click(screen.getByTestId('close-btn'));
 
@@ -100,7 +92,7 @@ describe('AddDialog', () => {
 
   describe('Form behavior', () => {
     it('displays all four form fields with correct labels', () => {
-      render(<AddDialog user={user} />);
+      render(<AddDialog user={mockUser} />);
 
       expect(screen.getByLabelText('Что самое худшее может случиться в этой ситуации')).toBeInTheDocument();
       expect(screen.getByLabelText('Какие самые плохие последствия могут быть у этой ситуации')).toBeInTheDocument();
@@ -117,14 +109,14 @@ describe('AddDialog', () => {
     });
 
     it('disables submit button when form is invalid', () => {
-      render(<AddDialog user={user} />);
+      render(<AddDialog user={mockUser} />);
 
       expect(screen.getByTestId('submit')).toHaveTextContent('Создать');
       expect(screen.getByTestId('submit')).toBeDisabled();
     });
 
     it('enables submit button when all required fields are filled', async () => {
-      render(<AddDialog user={user} />);
+      render(<AddDialog user={mockUser} />);
 
       await fillForm();
 
@@ -147,7 +139,7 @@ describe('AddDialog', () => {
         unwrap: unwrapMock,
       });
 
-      render(<AddDialog user={user} />);
+      render(<AddDialog user={mockUser} />);
       await fillForm();
 
       await waitFor(() => {
@@ -161,17 +153,17 @@ describe('AddDialog', () => {
         expect(screen.getByTestId('submit')).toBeDisabled();
       });
 
-      resolvePromise!(entry);
+      resolvePromise!(mockEntry);
     });
 
     it('calls createEntry with correct data on form submission', async () => {
       const mockedCreateEntry = vi.spyOn(entryActions, 'createEntry');
-      const unwrapMock = vi.fn().mockResolvedValue(entry);
+      const unwrapMock = vi.fn().mockResolvedValue(mockEntry);
       dispatch.mockReturnValue({
         unwrap: unwrapMock,
       });
 
-      render(<AddDialog user={user} />);
+      render(<AddDialog user={mockUser} />);
       await fillForm();
 
       await waitFor(() => {
@@ -182,17 +174,17 @@ describe('AddDialog', () => {
 
       await waitFor(() => {
         expect(mockedCreateEntry).toHaveBeenCalledTimes(1);
-        expect(mockedCreateEntry).toHaveBeenCalledWith(entry);
+        expect(mockedCreateEntry).toHaveBeenCalledWith(mockEntry);
       });
     });
 
     it('shows success toast on successful submission', async () => {
-      const unwrapMock = vi.fn().mockResolvedValue(entry);
+      const unwrapMock = vi.fn().mockResolvedValue(mockEntry);
       dispatch.mockReturnValue({
         unwrap: unwrapMock,
       });
 
-      render(<AddDialog user={user} />);
+      render(<AddDialog user={mockUser} />);
       await fillForm();
 
       await waitFor(() => {
@@ -213,7 +205,7 @@ describe('AddDialog', () => {
         unwrap: unwrapMock,
       });
 
-      render(<AddDialog user={user} />);
+      render(<AddDialog user={mockUser} />);
       await fillForm();
 
       await waitFor(() => {
@@ -228,12 +220,12 @@ describe('AddDialog', () => {
     });
 
     it('resets form after successful submission', async () => {
-      const unwrapMock = vi.fn().mockResolvedValue(entry);
+      const unwrapMock = vi.fn().mockResolvedValue(mockEntry);
       dispatch.mockReturnValue({
         unwrap: unwrapMock,
       });
 
-      render(<AddDialog user={user} />);
+      render(<AddDialog user={mockUser} />);
       await fillForm();
 
       await waitFor(() => {
@@ -253,12 +245,12 @@ describe('AddDialog', () => {
     });
 
     it('closes modal after successful submission', async () => {
-      const unwrapMock = vi.fn().mockResolvedValue(entry);
+      const unwrapMock = vi.fn().mockResolvedValue(mockEntry);
       dispatch.mockReturnValue({
         unwrap: unwrapMock,
       });
 
-      render(<AddDialog user={user} />);
+      render(<AddDialog user={mockUser} />);
       await fillForm();
 
       await waitFor(() => {

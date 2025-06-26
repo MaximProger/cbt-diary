@@ -11,16 +11,18 @@ interface IProps {
 }
 
 const EntryItem = ({ entry }: IProps) => {
+  console.log(entry);
+
   const dispatch: TAppDispatch = useDispatch();
   const dateObject = new Date(entry.created_at);
   const formattedDate = dateObject
     .toLocaleString('ru-RU', {
-      day: 'numeric', // День без ведущего нуля
-      month: 'long', // Полное название месяца
-      year: 'numeric', // Год полностью
-      hour: '2-digit', // Часы с ведущим нулем
-      minute: '2-digit', // Минуты с ведущим нулем
-      hour12: false, // 24-часовой формат
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
     })
     .replace(' г. в', ', ');
 
@@ -55,19 +57,27 @@ const EntryItem = ({ entry }: IProps) => {
           <div className="font-semibold mb-[8px] text-(--text-quaternary) text-sm">
             Что самое худшее может случиться
           </div>
-          <div className="text-(--text-tertiary) text-sm">{entry.worst_case}</div>
+          <div className="text-(--text-tertiary) text-sm" data-testid="worst_case_field">
+            {entry.worst_case}
+          </div>
         </div>
         <div className="bg-(--bg-quaternary) p-[16px] rounded-[8px] border-[1px] border-solid border-(--border-primary)">
           <div className="font-semibold mb-[8px] text-(--text-quaternary) text-sm">Какие последствия могут быть</div>
-          <div className="text-(--text-tertiary) text-sm">{entry.worst_consequences}</div>
+          <div className="text-(--text-tertiary) text-sm" data-testid="worst_consequences_field">
+            {entry.worst_consequences}
+          </div>
         </div>
         <div className="bg-(--bg-quaternary) p-[16px] rounded-[8px] border-[1px] border-solid border-(--border-primary)">
           <div className="font-semibold mb-[8px] text-(--text-quaternary) text-sm">Что я смогу сделать</div>
-          <div className="text-(--text-tertiary) text-sm">{entry.what_can_i_do}</div>
+          <div className="text-(--text-tertiary) text-sm" data-testid="what_can_i_do_field">
+            {entry.what_can_i_do}
+          </div>
         </div>
         <div className="bg-(--bg-quaternary) p-[16px] rounded-[8px] border-[1px] border-solid border-(--border-primary)">
           <div className="font-semibold mb-[8px] text-(--text-quaternary) text-sm">Как я справлюсь</div>
-          <div className="text-(--text-tertiary) text-sm">{entry.how_will_i_cope}</div>
+          <div className="text-(--text-tertiary) text-sm" data-testid="how_will_i_cope_field">
+            {entry.how_will_i_cope}
+          </div>
         </div>
       </div>
     </div>

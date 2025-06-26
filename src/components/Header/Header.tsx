@@ -25,29 +25,42 @@ const Header = ({ session }: IProps) => {
 
   return (
     <header className="bg-(--bg-secondary) border-solid border-[1px] border-(--border-primary) rounded-[12px] p-[20px_24px] mb-[24px] shadow-[0_1px_3px_var(--shadow-light)] flex justify-between items-center flex-wrap gap-[16px] max-md:p-[12px] max-md:mb-[12px] max-md:gap-[12px]">
-      <a className="text-lg font-semibold text-(--brand-secondary)" href="/">
+      <a className="text-lg font-semibold text-(--brand-secondary)" href="/" data-testid="logo">
         Дневник катастрофизации
       </a>
       <div className="flex flex-wrap gap-[12px]">
         {session && (
-          <div className="p-[8px_12px] bg-(--bg-tertiary) rounded-[8px] text-sm text-(--text-secondary) truncate max-w-[250px]">
+          <div
+            className="p-[8px_12px] bg-(--bg-tertiary) rounded-[8px] text-sm text-(--text-secondary) truncate max-w-[250px]"
+            data-testid="user_email"
+          >
             {session.user.email}
           </div>
         )}
         {session ? (
-          <Button color="red" size="sm" onClick={logout} aria-label="Выйти">
-            <span className="max-md:hidden">Выйти</span> <MdLogout className="hidden w-4 h-4 max-md:block" />
+          <Button color="red" size="sm" onClick={logout} aria-label="Выйти" data-testid="logout_btn">
+            <span className="max-md:hidden" data-testid="logout_text">
+              Выйти
+            </span>{' '}
+            <MdLogout className="hidden w-4 h-4 max-md:block" data-testid="logout_icon" />
           </Button>
         ) : (
-          <Button size="sm" onClick={openAuthDialogHandler} aria-label="Войти">
-            <span className="max-md:hidden">Войти</span> <MdLogin className="hidden w-4 h-4 max-md:block" />
+          <Button size="sm" onClick={openAuthDialogHandler} aria-label="Войти" data-testid="login_btn">
+            <span className="max-md:hidden" data-testid="login_text">
+              Войти
+            </span>{' '}
+            <MdLogin className="hidden w-4 h-4 max-md:block" data-testid="login_icon" />
           </Button>
         )}
 
-        <Button color="gray" size="sm" onClick={toggle} aria-label="Переключить тему">
-          {isDarkMode ? <MdLightMode className="w-4 h-4" /> : <MdDarkMode className="w-4 h-4" />}
+        <Button color="gray" size="sm" onClick={toggle} aria-label="Переключить тему" data-testid="theme_btn">
+          {isDarkMode ? (
+            <MdLightMode className="w-4 h-4" data-testid="light_mode_icon" />
+          ) : (
+            <MdDarkMode className="w-4 h-4" data-testid="dark_mode_icon" />
+          )}
         </Button>
-        <Button size="sm" onClick={openInfoDialogHandler} aria-label="Информация">
+        <Button size="sm" onClick={openInfoDialogHandler} aria-label="Информация" data-testid="info_btn">
           <MdInfo className="w-4 h-4" />
         </Button>
       </div>
