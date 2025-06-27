@@ -66,7 +66,7 @@ const Pannel = () => {
           inputMode="search"
           {...register('search', { required: true })}
         />
-        <Select className="min-w-[180px] max-md:w-full" id="sort" {...register('sort')} required>
+        <Select className="min-w-[180px] max-md:w-full" id="sort" {...register('sort')} data-testid="select" required>
           <option value="new">Сначала новые</option>
           <option value="old">Сначала старые</option>
         </Select>

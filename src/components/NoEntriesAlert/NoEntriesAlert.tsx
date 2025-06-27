@@ -12,7 +12,7 @@ const AdditionalContent = ({ onClick }: { onClick: () => void }) => {
         Начните вести дневник катастрофизации, чтобы отслеживать свои мысли и работать с негативными установками
       </p>
       <Button className="mt-[16px]" size="sm" onClick={onClick}>
-        <FaPlus className="mr-2 h-4 w-4" />
+        <FaPlus className="mr-2 h-4 w-4" data-testid="add_icon" />
         Добавить запись
       </Button>
     </>

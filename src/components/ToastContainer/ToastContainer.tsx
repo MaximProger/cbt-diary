@@ -31,12 +31,14 @@ const ToastContainer = ({ position = 'top-right', animation = 'slide', maxToasts
   const getFlexDirection = () => {
     return position.includes('bottom') ? 'flex-col-reverse' : 'flex-col';
   };
-
-  // Ограничиваем количество тостов
+  console.log(toasts);
   const visibleToasts = toasts.slice(-maxToasts);
 
   return (
-    <div className={`fixed ${getPositionClasses()} z-50 flex ${getFlexDirection()} gap-2 pointer-events-none`}>
+    <div
+      className={`fixed ${getPositionClasses()} z-50 flex ${getFlexDirection()} gap-2 pointer-events-none`}
+      data-testid="container"
+    >
       {visibleToasts.map((toast, index) => (
         <div
           key={toast.id}
@@ -45,6 +47,7 @@ const ToastContainer = ({ position = 'top-right', animation = 'slide', maxToasts
             // Добавляем задержку для красивого каскадного появления
             animationDelay: `${index * 100}ms`,
           }}
+          data-testid="item"
         >
           <ToastItem toast={toast} position={position} animation={animation} />
         </div>

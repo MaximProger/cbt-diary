@@ -2,7 +2,7 @@ import { Toast, ToastToggle } from 'flowbite-react';
 import { HiCheck, HiExclamation, HiInformationCircle, HiX } from 'react-icons/hi';
 import { useDispatch } from 'react-redux';
 import { removeToast } from '../../store/toastSlice';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import './ToastItem.css';
 import type { IToast } from '@/types';
 
@@ -19,22 +19,34 @@ const ToastItem = ({ toast, animation = 'slide' }: IProps) => {
 
   const icons = {
     success: (
-      <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-green-100 text-green-500 dark:bg-green-800 dark:text-green-200">
+      <div
+        className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-green-100 text-green-500 dark:bg-green-800 dark:text-green-200"
+        data-testid="success_icon"
+      >
         <HiCheck className="h-5 w-5" />
       </div>
     ),
     info: (
-      <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-100 text-blue-500 dark:bg-blue-800 dark:text-blue-200">
+      <div
+        className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-100 text-blue-500 dark:bg-blue-800 dark:text-blue-200"
+        data-testid="info_icon"
+      >
         <HiInformationCircle className="h-5 w-5" />
       </div>
     ),
     warning: (
-      <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-orange-100 text-orange-500 dark:bg-orange-700 dark:text-orange-200">
+      <div
+        className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-orange-100 text-orange-500 dark:bg-orange-700 dark:text-orange-200"
+        data-testid="warning_icon"
+      >
         <HiExclamation className="h-5 w-5" />
       </div>
     ),
     danger: (
-      <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-red-100 text-red-500 dark:bg-red-800 dark:text-red-200">
+      <div
+        className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-red-100 text-red-500 dark:bg-red-800 dark:text-red-200"
+        data-testid="danger_icon"
+      >
         <HiX className="h-5 w-5" />
       </div>
     ),
@@ -55,13 +67,13 @@ const ToastItem = ({ toast, animation = 'slide' }: IProps) => {
     }
   };
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setIsExiting(true);
     // Ждем завершения анимации перед удалением
     setTimeout(() => {
       dispatch(removeToast(toast.id));
     }, 300);
-  };
+  }, [dispatch, toast.id]);
 
   const handleMouseEnter = () => {
     setShowProgress(false);
@@ -80,13 +92,14 @@ const ToastItem = ({ toast, animation = 'slide' }: IProps) => {
 
       return () => clearTimeout(timer);
     }
-  }, [toast.id, toast.duration]);
+  }, [toast.id, toast.duration, handleClose]);
 
   return (
     <div
       className={`toast-container relative ${getAnimationClass()}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      data-testid="toast_container"
     >
       <Toast className="mb-2 shadow-lg">
         {icons[toast.type]}
@@ -108,6 +121,7 @@ const ToastItem = ({ toast, animation = 'slide' }: IProps) => {
                       ? '#f59e0b'
                       : '#3b82f6',
             }}
+            data-testid="progress_bar"
           />
         )}
       </Toast>

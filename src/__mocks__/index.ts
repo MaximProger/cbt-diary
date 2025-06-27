@@ -1,3 +1,5 @@
+import type { IToast } from '@/types';
+
 export const TEST_FIELD_VALUE = 'Test';
 
 export const mockUser = {
@@ -61,4 +63,11 @@ export const mockSession = {
   expires_at: 1750936192,
   refresh_token: 'vi7qnd4vnpp4',
   user: mockUser,
+};
+
+export const mockToast: IToast = {
+  id: '1',
+  type: 'success',
+  message: 'This is a success message',
+  duration: 3000,
 };
