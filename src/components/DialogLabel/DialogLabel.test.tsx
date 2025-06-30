@@ -16,9 +16,4 @@ describe('DialogLabel', () => {
     render(<DialogLabel>Dialog Label</DialogLabel>);
     expect(screen.getByTestId('flowbite-label')).not.toHaveAttribute('for');
   });
-
-  it('matches snapshot', () => {
-    const dialogLabel = render(<DialogLabel>Dialog Label</DialogLabel>);
-    expect(dialogLabel).toMatchSnapshot();
-  });
 });

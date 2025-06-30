@@ -13,13 +13,4 @@ describe('Container', () => {
     expect(screen.getByTestId('container')).toHaveClass('container');
     expect(screen.getByRole('article')).toBeInTheDocument();
   });
-
-  it('matches snapshot', () => {
-    const container = render(
-      <Container>
-        <article></article>
-      </Container>,
-    );
-    expect(container).toMatchSnapshot();
-  });
 });

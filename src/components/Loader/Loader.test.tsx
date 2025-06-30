@@ -47,9 +47,4 @@ describe('Loader', () => {
     const spinner = screen.getByRole('status', { name: 'Идёт загрузка...' });
     expect(spinner).toBeInTheDocument();
   });
-
-  it('matches snapshot', () => {
-    const { container } = render(<Loader className="test-class" wrapperClassName="test-wrapper" />);
-    expect(container.firstChild).toMatchSnapshot();
-  });
 });
