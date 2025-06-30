@@ -28,7 +28,9 @@ export type IAuthFormData = {
 
 export interface IToast {
   id: string;
-  type: 'success' | 'info' | 'warning' | 'danger';
+  type: TToastType;
   message: string;
-  duration?: number; // в миллисекундах, по умолчанию 5000
+  duration?: number;
 }
+
+export type TToastType = 'success' | 'info' | 'warning' | 'danger';
