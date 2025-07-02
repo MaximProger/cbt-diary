@@ -50,7 +50,7 @@ const AuthDialog = () => {
 
   return (
     <Modal dismissible show={isShowDialog} size="md" onClose={onClose}>
-      <ModalHeader>Добро пожаловать!</ModalHeader>
+      <ModalHeader data-testid="auth_dialog_header">Добро пожаловать!</ModalHeader>
       <ModalBody>
         <form onSubmit={handleSubmit(handleLogin)} data-testid="form">
           <div>

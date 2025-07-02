@@ -73,7 +73,7 @@ const EditDialog = () => {
 
   return (
     <Modal dismissible size="3xl" show={isShowDialog} onClose={handleDialogClose}>
-      <ModalHeader>Редактирование записи</ModalHeader>
+      <ModalHeader data-testid="edit_dialog_header">Редактирование записи</ModalHeader>
       <ModalBody>
         <form className="space-y-6" onSubmit={handleSubmit(onSubmit)} data-testid="form">
           <div>

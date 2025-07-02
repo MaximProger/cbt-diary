@@ -13,7 +13,7 @@ const InfoDialog = () => {
 
   return (
     <Modal dismissible show={isShowDialog} onClose={handleDialogClose}>
-      <ModalHeader>Дневник катастрофизации</ModalHeader>
+      <ModalHeader data-testid="info_dialog_header">Дневник катастрофизации</ModalHeader>
       <ModalBody>
         <div className="space-y-6">
           <p className="text-base leading-relaxed text-(--text-quaternary)">

@@ -32,7 +32,7 @@ const DeleteDialog = () => {
 
   return (
     <Modal show={isShowDialog} size="md" onClose={handleCloseDialog} popup dismissible>
-      <ModalHeader />
+      <ModalHeader data-testid="delete_dialog_header" />
       <ModalBody>
         <div className="text-center">
           <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />

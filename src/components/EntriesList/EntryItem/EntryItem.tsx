@@ -11,8 +11,6 @@ interface IProps {
 }
 
 const EntryItem = ({ entry }: IProps) => {
-  console.log(entry);
-
   const dispatch: TAppDispatch = useDispatch();
   const dateObject = new Date(entry.created_at);
   const formattedDate = dateObject

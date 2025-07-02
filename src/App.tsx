@@ -26,8 +26,6 @@ function App() {
   const dispatch: TAppDispatch = useDispatch();
   const { entries, status, error, isInitialLoading } = useSelector((state: TRootState) => state.entries);
 
-  console.log(entries);
-
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
@@ -65,7 +63,7 @@ function App() {
           {entries.length > 0 && <EntriesList isLoading={status === 'pending'} />}
           {entries.length === 0 && status === 'fulfilled' && <NoEntriesAlert session={session} />}
           {error && (
-            <Alert color="failure" icon={HiInformationCircle}>
+            <Alert color="failure" icon={HiInformationCircle} data-testid="error_alert">
               <span className="font-medium">Ошибка загрузки!</span> Во время загрузки записей возникла ошибка,
               попробуйте позже
             </Alert>

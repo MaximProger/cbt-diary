@@ -16,56 +16,56 @@ describe('ToastContainer', () => {
   it('renders nothing when toasts array is empty', () => {
     mockedSelect.mockReturnValue([]);
     render(<ToastContainer />);
-    expect(screen.queryByTestId('container')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('toast_container')).not.toBeInTheDocument();
   });
   it('displays toast items when toasts exist in state', () => {
     mockedSelect.mockReturnValue([mockToast]);
     render(<ToastContainer />);
-    expect(screen.getByTestId('container')).toBeInTheDocument();
-    expect(screen.getByTestId('item')).toBeInTheDocument();
+    expect(screen.getByTestId('toast_container')).toBeInTheDocument();
+    expect(screen.getByTestId('toast_item')).toBeInTheDocument();
   });
   it('applies correct positioning classes for each position prop', () => {
     mockedSelect.mockReturnValue([mockToast]);
     const { rerender } = render(<ToastContainer />);
-    expect(screen.getByTestId('container')).toHaveClass('top-4 right-4');
+    expect(screen.getByTestId('toast_container')).toHaveClass('top-4 right-4');
     rerender(<ToastContainer position="top-left" />);
-    expect(screen.getByTestId('container')).toHaveClass('top-4 left-4');
+    expect(screen.getByTestId('toast_container')).toHaveClass('top-4 left-4');
     rerender(<ToastContainer position="top-center" />);
-    expect(screen.getByTestId('container')).toHaveClass('top-4 left-1/2 transform -translate-x-1/2');
+    expect(screen.getByTestId('toast_container')).toHaveClass('top-4 left-1/2 transform -translate-x-1/2');
     rerender(<ToastContainer position="bottom-right" />);
-    expect(screen.getByTestId('container')).toHaveClass('bottom-4 right-4');
+    expect(screen.getByTestId('toast_container')).toHaveClass('bottom-4 right-4');
     rerender(<ToastContainer position="bottom-left" />);
-    expect(screen.getByTestId('container')).toHaveClass('bottom-4 left-4');
+    expect(screen.getByTestId('toast_container')).toHaveClass('bottom-4 left-4');
   });
   it('uses correct flex direction for bottom positions (flex-col-reverse)', () => {
     mockedSelect.mockReturnValue([mockToast]);
     const { rerender } = render(<ToastContainer />);
-    expect(screen.getByTestId('container')).not.toHaveClass('flex-col-reverse');
+    expect(screen.getByTestId('toast_container')).not.toHaveClass('flex-col-reverse');
     rerender(<ToastContainer position="bottom-left" />);
-    expect(screen.getByTestId('container')).toHaveClass('flex-col-reverse');
+    expect(screen.getByTestId('toast_container')).toHaveClass('flex-col-reverse');
   });
   it('uses correct flex direction for top positions (flex-col)', () => {
     mockedSelect.mockReturnValue([mockToast]);
     const { rerender } = render(<ToastContainer />);
-    expect(screen.getByTestId('container')).toHaveClass('flex-col');
+    expect(screen.getByTestId('toast_container')).toHaveClass('flex-col');
     rerender(<ToastContainer position="bottom-left" />);
-    expect(screen.getByTestId('container')).not.toHaveClass('flex-col');
+    expect(screen.getByTestId('toast_container')).not.toHaveClass('flex-col');
   });
   it('limits visible toasts to maxtoasts prop value', () => {
     mockedSelect.mockReturnValue([mockToast, mockToast, mockToast]);
     render(<ToastContainer maxToasts={2} />);
-    expect(screen.getAllByTestId('item')).toHaveLength(2);
+    expect(screen.getAllByTestId('toast_item')).toHaveLength(2);
   });
   it('passes correct props to toastitem component', () => {
     mockedSelect.mockReturnValue([mockToast]);
     render(<ToastContainer />);
-    expect(screen.getByTestId('item')).toHaveTextContent(mockToast.message);
+    expect(screen.getByTestId('toast_item')).toHaveTextContent(mockToast.message);
   });
   it('applies pointer-events-none to container and pointer-events-auto to items', () => {
     mockedSelect.mockReturnValue([mockToast]);
     render(<ToastContainer />);
-    expect(screen.getByTestId('container')).toHaveClass('pointer-events-none');
-    expect(screen.getByTestId('item')).toHaveClass('pointer-events-auto');
+    expect(screen.getByTestId('toast_container')).toHaveClass('pointer-events-none');
+    expect(screen.getByTestId('toast_item')).toHaveClass('pointer-events-auto');
   });
   it('shows most recent toasts when exceeding maxtoasts limit', () => {
     const mockToasts = [
@@ -88,7 +88,7 @@ describe('ToastContainer', () => {
     mockedSelect.mockReturnValue(mockToasts);
     render(<ToastContainer />);
 
-    const items = screen.getAllByTestId('item');
+    const items = screen.getAllByTestId('toast_item');
     expect(items[0]).toHaveStyle('animation-delay: 0ms');
     expect(items[1]).toHaveStyle('animation-delay: 100ms');
   });

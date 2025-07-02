@@ -13,8 +13,6 @@ const useThemeInitializer = () => {
     if (isInitialized.current) return;
 
     const savedTheme = localStorage.getItem('theme');
-    console.log('savedTheme', savedTheme);
-
     const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
     if (savedTheme) {

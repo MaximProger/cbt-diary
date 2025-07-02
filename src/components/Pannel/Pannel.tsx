@@ -55,7 +55,10 @@ const Pannel = () => {
   }, [dispatch, sortValue]);
 
   return (
-    <div className="bg-(--bg-secondary) rounded-[12px] p-[20px] mb-[24px] shadow-[0_1px_3px_var(--shadow-light)] border-[1px] border-solid border-(--border-primary) max-md:mb-[12px] max-md:p-[12px]">
+    <div
+      className="bg-(--bg-secondary) rounded-[12px] p-[20px] mb-[24px] shadow-[0_1px_3px_var(--shadow-light)] border-[1px] border-solid border-(--border-primary) max-md:mb-[12px] max-md:p-[12px]"
+      data-testid="pannel"
+    >
       <div className="flex gap-[16px] flex-wrap mb-[16px] max-md:gap-[12px] max-md:mb-[12px]">
         <TextInput
           theme={customTheme.textInput}
@@ -71,7 +74,7 @@ const Pannel = () => {
           <option value="old">Сначала старые</option>
         </Select>
       </div>
-      <Button className="max-md:w-full" size="sm" onClick={openAddDialog}>
+      <Button className="max-md:w-full" size="sm" onClick={openAddDialog} data-testid="add_entry_button">
         Добавить запись
       </Button>
     </div>

@@ -39,24 +39,6 @@ describe('toastSlice', () => {
       expect(result.toasts).toContainEqual(firstToast);
       expect(result.toasts).toContainEqual(newToast);
     });
-
-    it('should use default values when properties are missing', () => {
-      const minimalToast: Partial<IToast> = {
-        id: 'minimal-toast',
-        message: 'Minimal valid toast',
-      };
-
-      const action = addToast(minimalToast as IToast);
-      const result = toastReducer(initialState, action);
-
-      expect(result.toasts[0]).toMatchObject({
-        duration: initialState.defaultDuration,
-        position: initialState.defaultPosition,
-        animation: initialState.defaultAnimation,
-        pauseOnHover: true,
-        ...minimalToast,
-      });
-    });
   });
 
   describe('removeToast', () => {

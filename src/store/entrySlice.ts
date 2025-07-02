@@ -25,8 +25,6 @@ export const fetchEntries = createAsyncThunk('entries/fetchEntries', async (_, {
 
 export const loadMoreEntries = createAsyncThunk('entries/loadMoreEntries', async (_, { getState, rejectWithValue }) => {
   const state = getState() as TRootState;
-  console.log(state);
-
   const currentLength = state.entries.entries.length;
   const searchTerm = state.entries.searchTerm;
   const sortValue = state.entries.sortValue;
@@ -37,9 +35,6 @@ export const loadMoreEntries = createAsyncThunk('entries/loadMoreEntries', async
     .select('*')
     .order('created_at', { ascending })
     .range(currentLength, currentLength + ENTRIES_LIMIT - 1);
-
-  console.log(currentLength);
-  console.log(ENTRIES_LIMIT);
 
   const { data, error } = await buildSearchQuery(baseQuery, searchTerm);
 
@@ -52,7 +47,6 @@ export const createEntry = createAsyncThunk('entries/createEntry', async (entry:
   if (error) {
     return rejectWithValue(error.message);
   }
-  console.log('Created entry data:', data);
   return data;
 });
 
@@ -72,8 +66,6 @@ export const editEntry = createAsyncThunk('entries/editEntry', async (entry: IEn
   if (error) {
     return rejectWithValue(error.message);
   }
-
-  console.log('edit entry', entry);
 
   return data[0];
 });

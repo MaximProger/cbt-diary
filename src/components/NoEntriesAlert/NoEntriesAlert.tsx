@@ -35,6 +35,7 @@ const NoEntriesAlert = ({ session }: IProps) => {
       color="gray"
       icon={LuNotepadText}
       className="bg-(--bg-secondary) rounded-[12px] p-[20px] shadow-[0_1px_3px_var(--shadow-light)] border-[1px] border-solid border-(--border-primary)"
+      data-testid="no_entries_alert"
     >
       <span className="font-medium text-lg">Пока нет записей</span>
     </Alert>

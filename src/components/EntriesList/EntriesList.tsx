@@ -21,7 +21,10 @@ const EntriesList = ({ isLoading }: IProps) => {
 
   return (
     <>
-      <div className={clsx('flex flex-col gap-[16px] max-md:gap-[12px]', isLoading && 'animate-pulse')}>
+      <div
+        className={clsx('flex flex-col gap-[16px] max-md:gap-[12px]', isLoading && 'animate-pulse')}
+        data-testid="entries_list"
+      >
         {entries.map((entry) => (
           <EntryItem key={entry.id} entry={entry} />
         ))}

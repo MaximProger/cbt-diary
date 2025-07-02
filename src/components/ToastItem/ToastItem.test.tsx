@@ -38,11 +38,11 @@ describe('ToastItem', () => {
   });
   it('applies correct animation class based on animation prop', () => {
     const { rerender } = render(<ToastItem toast={mockToast} />);
-    expect(screen.getByTestId('toast_container')).toHaveClass('toast-enter');
+    expect(screen.getByTestId('toast')).toHaveClass('toast-enter');
     rerender(<ToastItem toast={mockToast} animation="bounce" />);
-    expect(screen.getByTestId('toast_container')).toHaveClass('toast-bounce-enter');
+    expect(screen.getByTestId('toast')).toHaveClass('toast-bounce-enter');
     rerender(<ToastItem toast={mockToast} animation="fade" />);
-    expect(screen.getByTestId('toast_container')).toHaveClass('toast-fade-enter');
+    expect(screen.getByTestId('toast')).toHaveClass('toast-fade-enter');
   });
   it('calls dispatch to remove toast when close button is clicked', async () => {
     const mockedRemoveToast = vi.spyOn(toastActions, 'removeToast');
@@ -75,12 +75,12 @@ describe('ToastItem', () => {
   it('hides progress bar on mouse enter', () => {
     render(<ToastItem toast={mockToast} />);
     expect(screen.getByTestId('progress_bar')).toBeInTheDocument();
-    fireEvent.mouseEnter(screen.getByTestId('toast_container'));
+    fireEvent.mouseEnter(screen.getByTestId('toast'));
     expect(screen.queryByTestId('progress_bar')).not.toBeInTheDocument();
   });
   it('shows progress bar on mouse leave', () => {
     render(<ToastItem toast={mockToast} />);
-    const container = screen.getByTestId('toast_container');
+    const container = screen.getByTestId('toast');
     fireEvent.mouseEnter(container);
     expect(screen.queryByTestId('progress_bar')).not.toBeInTheDocument();
     fireEvent.mouseLeave(container);
@@ -89,17 +89,17 @@ describe('ToastItem', () => {
   it('applies exit animation when closing', () => {
     const { rerender } = render(<ToastItem toast={mockToast} />);
     fireEvent.click(screen.getByRole('button'));
-    expect(screen.getByTestId('toast_container')).toHaveClass('toast-exit');
+    expect(screen.getByTestId('toast')).toHaveClass('toast-exit');
     rerender(<ToastItem toast={mockToast} animation="fade" />);
     fireEvent.click(screen.getByRole('button'));
-    expect(screen.getByTestId('toast_container')).toHaveClass('toast-fade-exit');
+    expect(screen.getByTestId('toast')).toHaveClass('toast-fade-exit');
   });
   it('delays toast removal until animation completes', async () => {
     const mockedRemoveToast = vi.spyOn(toastActions, 'removeToast');
     render(<ToastItem toast={mockToast} />);
     fireEvent.click(screen.getByRole('button'));
     expect(mockedRemoveToast).not.toHaveBeenCalled();
-    expect(screen.getByTestId('toast_container')).toHaveClass('toast-exit');
+    expect(screen.getByTestId('toast')).toHaveClass('toast-exit');
     await waitFor(
       () => {
         expect(mockedRemoveToast).toHaveBeenCalledWith(mockToast.id);

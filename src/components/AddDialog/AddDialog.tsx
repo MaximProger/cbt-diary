@@ -58,7 +58,7 @@ const AddDialog = ({ user }: IProps) => {
 
   return (
     <Modal dismissible size="3xl" show={isShowDialog} onClose={handleDialogClose}>
-      <ModalHeader>Добавление записи</ModalHeader>
+      <ModalHeader data-testid="add_dialog_header">Добавление записи</ModalHeader>
       <ModalBody>
         <form className="space-y-[16px]" onSubmit={handleSubmit(onSubmit)}>
           <div>

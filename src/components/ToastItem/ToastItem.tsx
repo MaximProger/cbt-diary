@@ -99,7 +99,7 @@ const ToastItem = ({ toast, animation = 'slide' }: IProps) => {
       className={`toast-container relative ${getAnimationClass()}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      data-testid="toast_container"
+      data-testid="toast"
     >
       <Toast className="mb-2 shadow-lg">
         {icons[toast.type]}

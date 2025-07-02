@@ -12,16 +12,10 @@ export interface IToast {
 
 export interface IToastState {
   toasts: IToast[];
-  defaultDuration: number;
-  defaultPosition: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'top-center';
-  defaultAnimation: 'slide' | 'bounce' | 'fade';
 }
 
 export const initialState: IToastState = {
   toasts: [],
-  defaultDuration: 5000,
-  defaultPosition: 'top-right',
-  defaultAnimation: 'slide',
 };
 
 const toastSlice = createSlice({
@@ -31,9 +25,6 @@ const toastSlice = createSlice({
     addToast: (state, action: PayloadAction<Omit<IToast, 'id'>>) => {
       const toast: IToast = {
         id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
-        duration: state.defaultDuration,
-        position: state.defaultPosition,
-        animation: state.defaultAnimation,
         pauseOnHover: true,
         ...action.payload,
       };

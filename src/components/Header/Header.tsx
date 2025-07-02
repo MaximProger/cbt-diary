@@ -24,7 +24,10 @@ const Header = ({ session }: IProps) => {
   const { isDarkMode, toggle } = useTheme();
 
   return (
-    <header className="bg-(--bg-secondary) border-solid border-[1px] border-(--border-primary) rounded-[12px] p-[20px_24px] mb-[24px] shadow-[0_1px_3px_var(--shadow-light)] flex justify-between items-center flex-wrap gap-[16px] max-md:p-[12px] max-md:mb-[12px] max-md:gap-[12px]">
+    <header
+      className="bg-(--bg-secondary) border-solid border-[1px] border-(--border-primary) rounded-[12px] p-[20px_24px] mb-[24px] shadow-[0_1px_3px_var(--shadow-light)] flex justify-between items-center flex-wrap gap-[16px] max-md:p-[12px] max-md:mb-[12px] max-md:gap-[12px]"
+      data-testid="header"
+    >
       <a className="text-lg font-semibold text-(--brand-secondary)" href="/" data-testid="logo">
         Дневник катастрофизации
       </a>
