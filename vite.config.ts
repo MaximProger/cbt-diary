@@ -23,13 +23,12 @@ export default defineConfig({
     tailwindcss(),
     flowbiteReact(),
     VitePWA({
-      registerType: 'autoUpdate',
-      devOptions: {
-        enabled: true,
-      },
       manifest: {
         name: 'Дневник катастрофизации',
-        short_name: 'Дневник катастрофизации',
+        short_name: 'Дневник',
+        start_url: '.',
+        display: 'standalone',
+        background_color: '#ffffff',
         theme_color: '#ffffff',
         icons: [
           {
@@ -43,6 +42,9 @@ export default defineConfig({
             type: 'image/png',
           },
         ],
+      },
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,webmanifest}'],
       },
     }),
   ],
